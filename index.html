@@ -1,0 +1,135 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Motorvia Compravendita</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Hub: titolo grande a sinistra, tre ingressi affiancati, flusso dei dati e team. */
+.hero { padding-block: 56px 36px; display: grid; gap: 18px; max-width: 820px; }
+.hero h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 800; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lead { color: var(--muted); font-size: 18px; max-width: 56ch; }
+.doors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; padding-bottom: 56px; }
+.door { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; display: grid; gap: 14px; align-content: start; text-decoration: none; min-width: 0; }
+.door:hover { border-color: var(--ink); }
+.door h2 { font-size: 28px; font-weight: 800; }
+.door p { color: var(--muted); }
+.door .live { font-family: var(--font-mono); font-size: 13px; border-top: 1px solid var(--line); padding-top: 12px; display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.door .go { font-weight: 600; color: var(--accent); }
+section.blk { padding-block: 48px; border-top: 1px solid var(--line); }
+.sec-head { margin-bottom: 26px; display: grid; gap: 8px; }
+.sec-head h2 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; }
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 2px solid var(--ink); }
+.flow li { list-style: none; padding: 20px 20px 0 0; display: grid; gap: 6px; align-content: start; }
+.flow { margin: 0; padding: 0; }
+.flow .n { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--accent); }
+.flow h3 { font-size: 20px; }
+.flow p { color: var(--muted); font-size: 15px; }
+.team { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin: 0; padding: 0; list-style: none; }
+.team li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.team .name { font-family: var(--font-display); font-weight: 700; font-size: 19px; }
+.team .role { font-family: var(--font-mono); font-size: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
+.team p { color: var(--muted); font-size: 14px; }
+footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+@media (max-width: 900px) {
+  .doors, .team { grid-template-columns: 1fr 1fr; }
+  .flow { grid-template-columns: 1fr 1fr; }
+  .flow li { padding-bottom: 20px; }
+}
+@media (max-width: 560px) {
+  .doors, .team, .flow { grid-template-columns: 1fr; }
+  .hero { padding-block: 36px 24px; }
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="index.html">
+      <span class="plate" aria-hidden="true"><span class="eu">I</span><span class="num">MV 100 AU</span></span>
+      Motorvia
+    </a>
+    <nav class="main" aria-label="Principale">
+      <a href="compra.html">Compra</a>
+      <a href="vendi.html">Vendi</a>
+      <a href="gestione.html">Gestione vendite</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <p class="eyebrow">Piattaforma di compravendita automobili</p>
+    <h1>Chi compra, chi vende e chi controlla le vendite, <em>nello stesso posto.</em></h1>
+    <p class="lead">Tre sezioni collegate tra loro. Un annuncio pubblicato da chi vende passa dalla revisione, compare tra le auto da comprare e, quando arriva un contatto, lo trovi nella gestione.</p>
+  </div>
+
+  <div class="doors">
+    <a class="door" href="compra.html">
+      <p class="eyebrow">Per chi compra</p>
+      <h2>Compra un'auto</h2>
+      <p>Cerca per marca, modello, prezzo, anno, chilometri e alimentazione. Apri l'annuncio, guarda i dettagli e scrivi al venditore.</p>
+      <p class="live"><span id="n-vendita">–</span></p>
+      <span class="go">Vai al catalogo →</span>
+    </a>
+    <a class="door" href="vendi.html">
+      <p class="eyebrow">Per chi vende</p>
+      <h2>Vendi la tua auto</h2>
+      <p>Compila i dati, aggiungi le foto e controlla l'anteprima dell'annuncio prima di inviarlo alla revisione.</p>
+      <p class="live"><span id="n-revisione">–</span></p>
+      <span class="go">Pubblica un annuncio →</span>
+    </a>
+    <a class="door" href="gestione.html">
+      <p class="eyebrow">Per chi gestisce</p>
+      <h2>Gestione vendite</h2>
+      <p>Approva gli annunci, rispondi alle richieste, segna le auto vendute e guarda l'andamento degli incassi.</p>
+      <p class="live"><span id="n-richieste">–</span></p>
+      <span class="go">Apri la gestione →</span>
+    </a>
+  </div>
+
+  <section class="blk" aria-labelledby="h-flow">
+    <div class="sec-head">
+      <p class="eyebrow">Il percorso di un annuncio</p>
+      <h2 id="h-flow">Dal venditore all'acquirente</h2>
+    </div>
+    <ol class="flow">
+      <li><span class="n">PASSO 1</span><h3>Il venditore pubblica</h3><p>Inserisce marca, modello, anno, prezzo, chilometri, stato dell'auto, foto e contatti.</p></li>
+      <li><span class="n">PASSO 2</span><h3>La gestione approva</h3><p>Controlla i dati e porta l'annuncio in vendita, oppure lo respinge.</p></li>
+      <li><span class="n">PASSO 3</span><h3>L'acquirente contatta</h3><p>Trova l'auto nel catalogo e invia una richiesta al venditore.</p></li>
+      <li><span class="n">PASSO 4</span><h3>La vendita si chiude</h3><p>La gestione registra il prezzo finale e l'acquirente. L'auto esce dal catalogo.</p></li>
+    </ol>
+  </section>
+
+  <section class="blk" aria-labelledby="h-team">
+    <div class="sec-head">
+      <p class="eyebrow">Il gruppo di lavoro</p>
+      <h2 id="h-team">Chi ha realizzato il progetto</h2>
+    </div>
+    <ul class="team">
+      <li><span class="name">Alessandro Locatelli</span><span class="role">Project Manager</span><p>Coordina il progetto, stabilisce le priorità e verifica i requisiti concordati.</p></li>
+      <li><span class="name">Lorenzo Decarolis</span><span class="role">Sviluppatore</span><p>Sviluppa le componenti tecniche e la visualizzazione degli annunci.</p></li>
+      <li><span class="name">Andrea Vitale</span><span class="role">Sviluppatore</span><p>Lavora a interfaccia, navigazione e sistemi di ricerca.</p></li>
+      <li><span class="name">Filippo Ciocca</span><span class="role">Sviluppatore</span><p>Cura la gestione degli annunci, i test e la correzione degli errori.</p></li>
+    </ul>
+  </section>
+
+  <footer class="foot">
+    <span>© 2026 Motorvia. Dati di esempio salvati solo nel tuo browser.</span>
+    <span>Progetto: sito web di compravendita di automobili.</span>
+  </footer>
+</div>
+
+<script src="store.js"></script>
+<script>
+(function () {
+  var a = MV.annunci(), r = MV.richieste();
+  var inV = a.filter(function (x) { return x.stato === "pubblicato"; }).length;
+  var rev = a.filter(function (x) { return x.stato === "revisione"; }).length;
+  var nu = r.filter(function (x) { return x.stato === "nuova"; }).length;
+  document.getElementById("n-vendita").textContent = inV + (inV === 1 ? " auto in vendita" : " auto in vendita");
+  document.getElementById("n-revisione").textContent = rev + (rev === 1 ? " annuncio in revisione" : " annunci in revisione");
+  document.getElementById("n-richieste").textContent = nu + (nu === 1 ? " richiesta nuova" : " richieste nuove");
+})();
+</script>
+
+</body></html>

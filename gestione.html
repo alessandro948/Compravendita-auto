@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Motorvia Gestione</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Gestione: riepilogo in alto, tre schede (annunci, richieste, vendite), tabelle e grafico a barre degli incassi. */
+.page-head { padding-block: 40px 24px; display: grid; gap: 10px; }
+.page-head h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; }
+.summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin-bottom: 28px; }
+.summary > div { padding: 16px 18px; display: grid; gap: 4px; border-right: 1px solid var(--line); min-width: 0; }
+.summary > div:last-child { border-right: 0; }
+.summary .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.summary .v { font-family: var(--font-display); font-weight: 800; font-size: 28px; letter-spacing: -0.02em; }
+.summary .v.warn { color: var(--warn); }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 20px; }
+.tabs button { font: inherit; font-weight: 600; font-size: 15px; background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 16px; cursor: pointer; color: var(--muted); margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tabs .badge { font-family: var(--font-mono); font-size: 11px; background: var(--warn); color: var(--bg); border-radius: 99px; padding: 1px 7px; margin-left: 6px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; align-items: end; }
+.toolbar label { min-width: 180px; flex: 0 1 220px; }
+.car-cell { display: grid; gap: 2px; min-width: 0; }
+.car-cell strong { font-family: var(--font-display); font-size: 16px; }
+.sold-row td { background: var(--bg); }
+.sold-form { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.sold-form label { min-width: 160px; flex: 0 1 200px; }
+.reqs { display: grid; gap: 12px; }
+.req { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 8px; }
+.req header { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: space-between; align-items: center; }
+.req .who { font-family: var(--font-display); font-weight: 700; font-size: 18px; }
+.req .contact { font-family: var(--font-mono); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2px 14px; }
+.req blockquote { margin: 0; padding-left: 12px; border-left: 3px solid var(--line); }
+.stats3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 24px; }
+.stats3 > div { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 4px; }
+.chart { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px 20px 14px; margin-bottom: 24px; }
+.chart h3 { font-size: 18px; margin-bottom: 16px; }
+.bars { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; align-items: end; height: 190px; border-bottom: 1px solid var(--line); }
+.bar { display: grid; gap: 4px; align-content: end; height: 100%; text-align: center; }
+.bar .fill { background: var(--accent); border-radius: 4px 4px 0 0; min-height: 2px; }
+.bar .val { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.months { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin-top: 6px; text-align: center; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.reset-box { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color: var(--muted); font-size: 13px; margin-top: 24px; }
+@media (max-width: 760px) {
+  .summary { grid-template-columns: 1fr 1fr; }
+  .summary > div:nth-child(2) { border-right: 0; }
+  .summary > div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .stats3 { grid-template-columns: 1fr; }
+  .page-head { padding-block: 28px 18px; }
+}
+@media (max-width: 480px) { .bars, .months { gap: 6px; } .bar .val { font-size: 9px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="index.html">
+      <span class="plate" aria-hidden="true"><span class="eu">I</span><span class="num">MV 100 AU</span></span>
+      Motorvia
+    </a>
+    <nav class="main" aria-label="Principale">
+      <a href="compra.html">Compra</a>
+      <a href="vendi.html">Vendi</a>
+      <a href="gestione.html" aria-current="page">Gestione vendite</a>
+    </nav>
+  </header>
+
+  <div class="page-head">
+    <p class="eyebrow">Per chi gestisce</p>
+    <h1>Gestione vendite</h1>
+  </div>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="tabs" role="tablist" aria-label="Sezioni">
+    <button role="tab" id="tab-annunci" aria-controls="p-annunci" aria-selected="true" data-tab="annunci">Annunci</button>
+    <button role="tab" id="tab-richieste" aria-controls="p-richieste" aria-selected="false" data-tab="richieste">Richieste</button>
+    <button role="tab" id="tab-vendite" aria-controls="p-vendite" aria-selected="false" data-tab="vendite">Vendite</button>
+  </div>
+
+  <div id="p-annunci" role="tabpanel" aria-labelledby="tab-annunci">
+    <div class="toolbar">
+      <label for="a-stato">Stato
+        <select id="a-stato">
+          <option value="">Tutti</option>
+          <option value="revisione">In revisione</option>
+          <option value="pubblicato">In vendita</option>
+          <option value="venduto">Vendute</option>
+          <option value="rifiutato">Non pubblicate</option>
+        </select>
+      </label>
+      <label for="a-q">Cerca
+        <input id="a-q" type="search" placeholder="Marca, modello, venditore">
+      </label>
+    </div>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>Rif.</th><th>Auto</th><th>Venditore</th><th class="r">Prezzo</th><th>Stato</th><th>Azioni</th></tr></thead>
+        <tbody id="a-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="p-richieste" role="tabpanel" aria-labelledby="tab-richieste" hidden>
+    <div class="toolbar">
+      <label for="r-stato">Mostra
+        <select id="r-stato"><option value="">Tutte</option><option value="nuova">Solo nuove</option><option value="gestita">Gestite</option></select>
+      </label>
+    </div>
+    <div class="reqs" id="r-list"></div>
+  </div>
+
+  <div id="p-vendite" role="tabpanel" aria-labelledby="tab-vendite" hidden>
+    <div class="stats3" id="v-stats"></div>
+    <div class="chart">
+      <h3>Incassi degli ultimi 6 mesi</h3>
+      <div class="bars" id="v-bars"></div>
+      <div class="months" id="v-months"></div>
+    </div>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>Data</th><th>Auto</th><th>Acquirente</th><th class="r">Richiesto</th><th class="r">Venduto</th><th class="r">Differenza</th></tr></thead>
+        <tbody id="v-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="reset-box">
+    <button class="btn ghost small" type="button" id="reset">Ripristina i dati di esempio</button>
+    <span class="note" id="reset-note">Cancella gli annunci e le richieste inseriti in questo browser.</span>
+  </div>
+
+  <footer class="foot">I dati sono salvati nel browser di chi usa il sito: non c'è un archivio condiviso tra persone diverse.</footer>
+</div>
+
+<script src="store.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = MV.esc, eur = MV.eur;
+  var state = { tab: "annunci", sold: null, del: null, resetSure: false };
+  var DAY = 86400000;
+
+  function summary() {
+    var a = MV.annunci(), r = MV.richieste();
+    var inV = a.filter(function (x) { return x.stato === "pubblicato"; }).length;
+    var rev = a.filter(function (x) { return x.stato === "revisione"; }).length;
+    var nu = r.filter(function (x) { return x.stato === "nuova"; }).length;
+    var inc = a.filter(function (x) { return x.stato === "venduto" && Date.now() - new Date(x.dataVendita) <= 30 * DAY; })
+      .reduce(function (s, x) { return s + (x.prezzoVendita || 0); }, 0);
+    $("summary").innerHTML =
+      '<div><span class="k">In vendita</span><span class="v">' + inV + '</span></div>' +
+      '<div><span class="k">Da approvare</span><span class="v' + (rev ? ' warn' : '') + '">' + rev + '</span></div>' +
+      '<div><span class="k">Richieste nuove</span><span class="v' + (nu ? ' warn' : '') + '">' + nu + '</span></div>' +
+      '<div><span class="k">Incassi, 30 giorni</span><span class="v mono">' + eur.format(inc) + '</span></div>';
+    $("tab-richieste").innerHTML = 'Richieste' + (nu ? '<span class="badge">' + nu + '</span>' : '');
+  }
+
+  /* annunci */
+  function azioni(a) {
+    var b = [];
+    var id = a.id;
+    if (a.stato === "revisione") {
+      b.push('<button class="btn small" data-act="approve" data-id="' + id + '">Approva</button>');
+      b.push('<button class="btn ghost small" data-act="reject" data-id="' + id + '">Rifiuta</button>');
+    } else if (a.stato === "pubblicato") {
+      b.push('<button class="btn small" data-act="sold-open" data-id="' + id + '">Segna venduta</button>');
+      b.push('<button class="btn ghost small" data-act="reject" data-id="' + id + '">Ritira</button>');
+    } else if (a.stato === "venduto") {
+      b.push('<button class="btn ghost small" data-act="unsell" data-id="' + id + '">Annulla vendita</button>');
+    } else {
+      b.push('<button class="btn ghost small" data-act="approve" data-id="' + id + '">Ripubblica</button>');
+    }
+    b.push(state.del === id
+      ? '<button class="btn danger small" data-act="del-ok" data-id="' + id + '">Conferma elimina</button>'
+      : '<button class="btn danger small" data-act="del" data-id="' + id + '">Elimina</button>');
+    return '<div class="actions">' + b.join("") + '</div>';
+  }
+  function annunci() {
+    var st = $("a-stato").value, q = $("a-q").value.trim().toLowerCase();
+    var l = MV.annunci().filter(function (a) {
+      if (st && a.stato !== st) return false;
+      var v = a.venditore || {};
+      if (q && (a.marca + " " + a.modello + " " + (v.nome || "")).toLowerCase().indexOf(q) === -1) return false;
+      return true;
+    }).sort(function (x, y) {
+      var o = { revisione: 0, pubblicato: 1, rifiutato: 2, venduto: 3 };
+      return o[x.stato] - o[y.stato] || new Date(y.data) - new Date(x.data);
+    });
+    if (!l.length) {
+      $("a-body").innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px">Nessun annuncio corrisponde ai filtri.</td></tr>';
+      return;
+    }
+    $("a-body").innerHTML = l.map(function (a) {
+      var v = a.venditore || {};
+      var row = '<tr><td class="mono">' + MV.rif(a) + '</td>' +
+        '<td><div class="car-cell"><strong>' + esc(a.marca) + ' ' + esc(a.modello) + '</strong><span class="note">' + esc(a.anno) + ' · ' + MV.nf.format(a.km) + ' km · ' + esc(a.carb) + '</span></div></td>' +
+        '<td><div class="car-cell"><span>' + esc(v.nome || "") + '</span><span class="note">' + esc(v.tel || v.mail || "") + '</span></div></td>' +
+        '<td class="r mono">' + eur.format(a.prezzo) + '</td>' +
+        '<td><span class="pill ' + a.stato + '">' + MV.STATI[a.stato] + '</span></td>' +
+        '<td>' + azioni(a) + '</td></tr>';
+      if (state.sold === a.id) {
+        row += '<tr class="sold-row"><td colspan="6"><div class="sold-form">' +
+          '<label for="s-prezzo">Prezzo finale in euro<input id="s-prezzo" type="number" min="0" step="100" value="' + a.prezzo + '"></label>' +
+          '<label for="s-acq">Acquirente<input id="s-acq" type="text" placeholder="Nome e cognome"></label>' +
+          '<button class="btn small" data-act="sold-ok" data-id="' + a.id + '">Conferma vendita</button>' +
+          '<button class="btn ghost small" data-act="sold-no" data-id="' + a.id + '">Annulla</button>' +
+          '<span class="err" id="s-err"></span></div></td></tr>';
+      }
+      return row;
+    }).join("");
+  }
+  $("a-body").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-act]");
+    if (!b) return;
+    var id = +b.getAttribute("data-id"), act = b.getAttribute("data-act");
+    if (act === "approve") MV.updAnnuncio(id, { stato: "pubblicato" });
+    else if (act === "reject") { MV.updAnnuncio(id, { stato: "rifiutato" }); if (state.sold === id) state.sold = null; }
+    else if (act === "sold-open") { state.sold = id; state.del = null; }
+    else if (act === "sold-no") state.sold = null;
+    else if (act === "sold-ok") {
+      var p = +$("s-prezzo").value, acq = $("s-acq").value.trim();
+      if (!p || !acq) { $("s-err").textContent = "Inserisci prezzo finale e nome dell'acquirente."; return; }
+      MV.updAnnuncio(id, { stato: "venduto", prezzoVendita: p, acquirente: acq, dataVendita: new Date().toISOString() });
+      state.sold = null;
+    }
+    else if (act === "unsell") MV.updAnnuncio(id, { stato: "pubblicato", prezzoVendita: null, acquirente: null, dataVendita: null });
+    else if (act === "del") { state.del = id; state.sold = null; }
+    else if (act === "del-ok") { MV.delAnnuncio(id); state.del = null; }
+    tutto();
+  });
+  ["a-stato", "a-q"].forEach(function (id) { $(id).addEventListener("input", annunci); $(id).addEventListener("change", annunci); });
+
+  /* richieste */
+  function richieste() {
+    var st = $("r-stato").value;
+    var ann = {};
+    MV.annunci().forEach(function (a) { ann[a.id] = a; });
+    var l = MV.richieste().filter(function (r) { return !st || r.stato === st; })
+      .sort(function (a, b) { return new Date(b.data) - new Date(a.data); });
+    if (!l.length) { $("r-list").innerHTML = '<div class="empty"><p>Nessuna richiesta da mostrare.</p></div>'; return; }
+    $("r-list").innerHTML = l.map(function (r) {
+      var a = ann[r.annuncioId];
+      var auto = a ? esc(a.marca) + ' ' + esc(a.modello) + ' · ' + MV.rif(a) : 'Annuncio eliminato';
+      return '<article class="req"><header><span class="who">' + esc(r.nome) + '</span><span class="pill ' + r.stato + '">' + (r.stato === "nuova" ? "Nuova" : "Gestita") + '</span></header>' +
+        '<p class="note">' + auto + ' · ' + MV.fmtData(r.data) + '</p>' +
+        '<blockquote>' + esc(r.msg || "Nessun messaggio.") + '</blockquote>' +
+        '<div class="contact">' + (r.tel ? '<span>' + esc(r.tel) + '</span>' : '') + (r.mail ? '<span>' + esc(r.mail) + '</span>' : '') + '</div>' +
+        '<div><button class="btn ghost small" data-rid="' + r.id + '" data-to="' + (r.stato === "nuova" ? "gestita" : "nuova") + '">' + (r.stato === "nuova" ? "Segna come gestita" : "Riapri") + '</button></div></article>';
+    }).join("");
+  }
+  $("r-list").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-rid]");
+    if (!b) return;
+    MV.updRichiesta(+b.getAttribute("data-rid"), { stato: b.getAttribute("data-to") });
+    tutto();
+  });
+  $("r-stato").addEventListener("change", richieste);
+
+  /* vendite */
+  function vendite() {
+    var l = MV.annunci().filter(function (a) { return a.stato === "venduto"; })
+      .sort(function (a, b) { return new Date(b.dataVendita) - new Date(a.dataVendita); });
+    var tot = l.reduce(function (s, a) { return s + (a.prezzoVendita || 0); }, 0);
+    var rich = l.reduce(function (s, a) { return s + a.prezzo; }, 0);
+    var medio = l.length ? tot / l.length : 0;
+    var diff = rich ? (tot - rich) / rich * 100 : 0;
+    $("v-stats").innerHTML =
+      '<div><span class="eyebrow">Auto vendute</span><span class="price mono">' + l.length + '</span></div>' +
+      '<div><span class="eyebrow">Incasso totale</span><span class="price mono">' + eur.format(tot) + '</span></div>' +
+      '<div><span class="eyebrow">Sconto medio sul richiesto</span><span class="price mono">' + (l.length ? diff.toFixed(1).replace(".", ",") + "%" : "–") + '</span></div>';
+
+    var now = new Date(), mesi = [];
+    for (var i = 5; i >= 0; i--) {
+      var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      mesi.push({ y: d.getFullYear(), m: d.getMonth(), tot: 0, label: d.toLocaleDateString("it-IT", { month: "short" }) });
+    }
+    l.forEach(function (a) {
+      var d = new Date(a.dataVendita);
+      mesi.forEach(function (m) { if (m.y === d.getFullYear() && m.m === d.getMonth()) m.tot += a.prezzoVendita || 0; });
+    });
+    var max = Math.max.apply(null, mesi.map(function (m) { return m.tot; }).concat([1]));
+    $("v-bars").innerHTML = mesi.map(function (m) {
+      var h = Math.round(m.tot / max * 130);
+      return '<div class="bar" title="' + eur.format(m.tot) + '"><span class="val">' + (m.tot ? Math.round(m.tot / 1000) + " mila" : "0") + '</span><div class="fill" style="height:' + h + 'px"></div></div>';
+    }).join("");
+    $("v-months").innerHTML = mesi.map(function (m) { return '<span>' + m.label + '</span>'; }).join("");
+
+    if (!l.length) { $("v-body").innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px">Nessuna vendita registrata.</td></tr>'; return; }
+    $("v-body").innerHTML = l.map(function (a) {
+      var df = (a.prezzoVendita || 0) - a.prezzo;
+      return '<tr><td class="mono">' + MV.fmtData(a.dataVendita) + '</td>' +
+        '<td><div class="car-cell"><strong>' + esc(a.marca) + ' ' + esc(a.modello) + '</strong><span class="note">' + MV.rif(a) + '</span></div></td>' +
+        '<td>' + esc(a.acquirente || "–") + '</td>' +
+        '<td class="r mono">' + eur.format(a.prezzo) + '</td>' +
+        '<td class="r mono">' + eur.format(a.prezzoVendita || 0) + '</td>' +
+        '<td class="r mono" style="color:' + (df < 0 ? "var(--bad)" : "var(--ok)") + '">' + (df > 0 ? "+" : "") + eur.format(df) + '</td></tr>';
+    }).join("");
+  }
+
+  function tutto() { summary(); annunci(); richieste(); vendite(); }
+
+  /* schede */
+  document.querySelector(".tabs").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-tab]");
+    if (!b) return;
+    state.tab = b.getAttribute("data-tab");
+    ["annunci", "richieste", "vendite"].forEach(function (t) {
+      $("p-" + t).hidden = t !== state.tab;
+      $("tab-" + t).setAttribute("aria-selected", t === state.tab ? "true" : "false");
+    });
+  });
+
+  /* ripristino */
+  $("reset").addEventListener("click", function () {
+    if (!state.resetSure) {
+      state.resetSure = true;
+      $("reset").textContent = "Conferma il ripristino";
+      $("reset-note").textContent = "Gli annunci e le richieste inseriti da te andranno persi.";
+      return;
+    }
+    MV.reset();
+    state = { tab: state.tab, sold: null, del: null, resetSure: false };
+    $("reset").textContent = "Ripristina i dati di esempio";
+    $("reset-note").textContent = "Dati di esempio ripristinati.";
+    tutto();
+  });
+
+  tutto();
+})();
+</script>
+</body>
+</html>

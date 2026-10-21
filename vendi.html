@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Motorvia Vendi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Vendi: modulo a sinistra, anteprima dell'annuncio a destra, poi l'elenco dei propri annunci. */
+.page-head { padding-block: 40px 28px; display: grid; gap: 10px; }
+.page-head h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; }
+.page-head p.lead { color: var(--muted); max-width: 60ch; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 32px; align-items: start; padding-bottom: 40px; }
+fieldset { border: 0; padding: 0; margin: 0 0 26px; min-width: 0; }
+legend { font-family: var(--font-display); font-weight: 700; font-size: 20px; padding: 0; margin-bottom: 14px; }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { display: block; position: relative; cursor: pointer; }
+.sw input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.sw span { display: block; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line); }
+.sw input:checked + span { outline: 3px solid var(--accent); outline-offset: 2px; border-color: var(--bg); }
+.sw input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.hint { font-size: 13px; color: var(--muted); }
+.hint strong { color: var(--ink); font-family: var(--font-mono); font-weight: 500; }
+.photos { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.photos .ph { position: relative; width: 96px; height: 72px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
+.photos .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photos .ph button { position: absolute; right: 3px; top: 3px; width: 24px; height: 24px; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .7); color: #fff; cursor: pointer; font-size: 14px; line-height: 1; }
+.preview { display: grid; gap: 12px; }
+.preview .card { max-width: 380px; }
+.mine { padding-block: 40px 56px; border-top: 1px solid var(--line); }
+.mine h2 { font-size: clamp(24px, 3.5vw, 32px); font-weight: 800; margin-bottom: 20px; }
+.mine ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.mine li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.mine .t { min-width: 0; display: grid; gap: 2px; }
+.mine .t strong { font-family: var(--font-display); font-size: 18px; }
+.mine .r { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color: var(--muted); font-size: 13px; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .page-head { padding-block: 28px 20px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="index.html">
+      <span class="plate" aria-hidden="true"><span class="eu">I</span><span class="num">MV 100 AU</span></span>
+      Motorvia
+    </a>
+    <nav class="main" aria-label="Principale">
+      <a href="compra.html">Compra</a>
+      <a href="vendi.html" aria-current="page">Vendi</a>
+      <a href="gestione.html">Gestione vendite</a>
+    </nav>
+  </header>
+
+  <div class="page-head">
+    <p class="eyebrow">Per chi vende</p>
+    <h1>Pubblica il tuo annuncio</h1>
+    <p class="lead">Inserisci i dati dell'auto, descrivi com'è messa e aggiungi le foto. A destra vedi l'annuncio come lo vedranno gli acquirenti. Dopo l'invio passa alla revisione.</p>
+  </div>
+
+  <div class="layout">
+    <form class="panel" id="form" novalidate>
+      <fieldset>
+        <legend>L'auto</legend>
+        <div class="form-grid">
+          <label for="v-marca">Marca
+            <input id="v-marca" type="text" list="marche" placeholder="Es. Fiat" autocomplete="off">
+            <datalist id="marche">
+              <option>Abarth</option><option>Alfa Romeo</option><option>Audi</option><option>BMW</option><option>Citroën</option><option>Dacia</option><option>Fiat</option><option>Ford</option><option>Honda</option><option>Hyundai</option><option>Jeep</option><option>Kia</option><option>Lancia</option><option>Mercedes-Benz</option><option>Mini</option><option>Nissan</option><option>Opel</option><option>Peugeot</option><option>Renault</option><option>Seat</option><option>Skoda</option><option>Tesla</option><option>Toyota</option><option>Volkswagen</option><option>Volvo</option>
+            </datalist>
+          </label>
+          <label for="v-modello">Modello
+            <input id="v-modello" type="text" placeholder="Es. Panda">
+          </label>
+          <label for="v-versione" class="full">Versione o allestimento
+            <input id="v-versione" type="text" placeholder="Es. 1.0 Hybrid City Life">
+          </label>
+          <label for="v-anno">Anno di immatricolazione
+            <select id="v-anno"></select>
+          </label>
+          <label for="v-km">Chilometraggio
+            <input id="v-km" type="number" min="0" max="500000" step="1000" value="60000" inputmode="numeric">
+          </label>
+          <label for="v-carb">Alimentazione
+            <select id="v-carb"><option>Benzina</option><option>Diesel</option><option>Ibrida</option><option>Elettrica</option><option>GPL</option></select>
+          </label>
+          <label for="v-cambio">Cambio
+            <select id="v-cambio"><option>Manuale</option><option>Automatico</option></select>
+          </label>
+          <label for="v-cv">Potenza in CV
+            <input id="v-cv" type="number" min="20" max="900" value="90" inputmode="numeric">
+          </label>
+          <label for="v-tipo">Carrozzeria
+            <select id="v-tipo">
+              <option value="utilitaria">Utilitaria</option>
+              <option value="berlina" selected>Berlina</option>
+              <option value="suv">SUV</option>
+              <option value="station">Station wagon</option>
+            </select>
+          </label>
+          <div class="full">
+            <p style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px">Colore</p>
+            <div class="swatches" id="swatches" role="radiogroup" aria-label="Colore"></div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Prezzo e stato</legend>
+        <div class="form-grid">
+          <label for="v-prezzo" class="full">Prezzo di vendita in euro
+            <input id="v-prezzo" type="number" min="0" max="500000" step="100" value="" placeholder="Es. 9500" inputmode="numeric">
+            <span class="hint" id="v-hint"></span>
+          </label>
+          <label for="v-desc" class="full">Descrizione dello stato dell'auto
+            <textarea id="v-desc" placeholder="Tagliandi, numero di proprietari, eventuali danni, gomme, garanzia residua…"></textarea>
+          </label>
+          <label for="v-opt" class="full">Dotazioni, separate da virgola
+            <input id="v-opt" type="text" placeholder="Es. Navigatore, Sensori di parcheggio, Cerchi in lega">
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Fotografie</legend>
+        <label for="v-foto">Aggiungi fino a 3 foto
+          <input id="v-foto" type="file" accept="image/*" multiple>
+        </label>
+        <div class="photos" id="photos"></div>
+        <p class="hint" style="margin-top:8px">Le foto vengono ridimensionate e restano salvate nel tuo browser.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>I tuoi contatti</legend>
+        <div class="form-grid">
+          <label for="v-nome" class="full">Nome e cognome
+            <input id="v-nome" type="text" autocomplete="name">
+          </label>
+          <label for="v-tel">Telefono
+            <input id="v-tel" type="tel" autocomplete="tel">
+          </label>
+          <label for="v-mail">Email
+            <input id="v-mail" type="email" autocomplete="email">
+          </label>
+        </div>
+      </fieldset>
+
+      <div id="errs" aria-live="polite"></div>
+      <button class="btn" type="submit">Invia l'annuncio alla revisione</button>
+      <div id="done" aria-live="polite"></div>
+    </form>
+
+    <aside class="preview" aria-label="Anteprima dell'annuncio">
+      <p class="eyebrow">Anteprima</p>
+      <div class="card" id="preview"></div>
+      <p class="hint">L'annuncio compare nel catalogo dopo l'approvazione della gestione.</p>
+    </aside>
+  </div>
+
+  <section class="mine" aria-labelledby="h-mine">
+    <h2 id="h-mine">I tuoi annunci</h2>
+    <ul id="mine"></ul>
+  </section>
+
+  <footer class="foot">Gli annunci inviati da questa pagina sono visibili nel catalogo e nella gestione solo in questo browser.</footer>
+</div>
+
+<script src="store.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = MV.esc, eur = MV.eur;
+  var COLORS = [["Bianco", "#E9ECEE"], ["Nero", "#23282B"], ["Grigio", "#9AA3A8"], ["Blu", "#2B4C7E"], ["Rosso", "#B8322B"], ["Verde", "#5D6B50"], ["Arancione", "#E08A1E"], ["Azzurro", "#7FB5C9"]];
+  var BASE = { utilitaria: 15000, berlina: 24000, suv: 34000, station: 28000 };
+  var fotos = [];
+
+  /* controlli iniziali */
+  var h = "";
+  for (var y = 2026; y >= 2006; y--) h += '<option value="' + y + '">' + y + '</option>';
+  $("v-anno").innerHTML = h; $("v-anno").value = 2020;
+  $("swatches").innerHTML = COLORS.map(function (c, i) {
+    return '<label class="sw"><input type="radio" name="colore" value="' + c[1] + '" aria-label="' + c[0] + '"' + (i === 2 ? " checked" : "") + '><span style="background:' + c[1] + '"></span></label>';
+  }).join("");
+
+  function valori() {
+    var colore = document.querySelector('input[name="colore"]:checked');
+    return {
+      marca: $("v-marca").value.trim(), modello: $("v-modello").value.trim(), versione: $("v-versione").value.trim(),
+      anno: +$("v-anno").value, km: Math.max(0, +$("v-km").value || 0), carb: $("v-carb").value, cambio: $("v-cambio").value,
+      cv: +$("v-cv").value || 0, tipo: $("v-tipo").value, hex: colore ? colore.value : "#9AA3A8",
+      prezzo: Math.max(0, +$("v-prezzo").value || 0), desc: $("v-desc").value.trim(),
+      opt: $("v-opt").value.split(",").map(function (s) { return s.trim(); }).filter(Boolean),
+      venditore: { nome: $("v-nome").value.trim(), tel: $("v-tel").value.trim(), mail: $("v-mail").value.trim() }
+    };
+  }
+  function stima(v) {
+    var eta = Math.max(0, 2026 - v.anno);
+    var val = BASE[v.tipo] * Math.pow(0.87, eta) * (1 - Math.min(v.km, 300000) / 420000);
+    if (v.carb === "Elettrica") val *= 1.08;
+    val = Math.max(val, 700);
+    return [Math.round(val * 0.92 / 50) * 50, Math.round(val * 1.08 / 50) * 50];
+  }
+  function aggiorna() {
+    var v = valori();
+    var p = {
+      id: 0, marca: v.marca || "Marca", modello: v.modello || "Modello", versione: v.versione, anno: v.anno, km: v.km,
+      carb: v.carb, cambio: v.cambio, tipo: v.tipo, hex: v.hex, prezzo: v.prezzo, foto: fotos
+    };
+    $("preview").innerHTML = MV.cardInner(p).replace("MV 000", "MV nuovo");
+    var s = stima(v);
+    $("v-hint").innerHTML = 'Valore di mercato indicativo: <strong>' + eur.format(s[0]) + ' – ' + eur.format(s[1]) + '</strong>';
+  }
+  ["v-marca", "v-modello", "v-versione", "v-anno", "v-km", "v-carb", "v-cambio", "v-tipo", "v-prezzo"].forEach(function (id) {
+    $(id).addEventListener("input", aggiorna);
+    $(id).addEventListener("change", aggiorna);
+  });
+  $("swatches").addEventListener("change", aggiorna);
+
+  /* foto */
+  function ridimensiona(file, cb) {
+    var fr = new FileReader();
+    fr.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var sc = Math.min(1, 720 / Math.max(img.width, img.height));
+        var cv = document.createElement("canvas");
+        cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc);
+        cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+        cb(cv.toDataURL("image/jpeg", 0.7));
+      };
+      img.onerror = function () { cb(null); };
+      img.src = fr.result;
+    };
+    fr.onerror = function () { cb(null); };
+    fr.readAsDataURL(file);
+  }
+  function mostraFoto() {
+    $("photos").innerHTML = fotos.map(function (f, i) {
+      return '<div class="ph"><img src="' + f + '" alt="Foto ' + (i + 1) + '"><button type="button" data-i="' + i + '" aria-label="Rimuovi foto ' + (i + 1) + '">×</button></div>';
+    }).join("");
+    aggiorna();
+  }
+  $("v-foto").addEventListener("change", function () {
+    var files = Array.from($("v-foto").files).slice(0, 3 - fotos.length);
+    var pending = files.length;
+    if (!pending) return;
+    files.forEach(function (f) {
+      ridimensiona(f, function (d) {
+        if (d && fotos.length < 3) fotos.push(d);
+        pending--;
+        if (!pending) { $("v-foto").value = ""; mostraFoto(); }
+      });
+    });
+  });
+  $("photos").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-i]");
+    if (!b) return;
+    fotos.splice(+b.getAttribute("data-i"), 1);
+    mostraFoto();
+  });
+
+  /* invio */
+  $("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = valori(), errs = [];
+    if (!v.marca) errs.push("la marca");
+    if (!v.modello) errs.push("il modello");
+    if (!v.prezzo) errs.push("il prezzo");
+    if (v.desc.length < 20) errs.push("la descrizione dello stato (almeno 20 caratteri)");
+    if (!v.venditore.nome) errs.push("il tuo nome");
+    if (!v.venditore.tel && !v.venditore.mail) errs.push("un telefono o un'email");
+    $("done").innerHTML = "";
+    if (errs.length) {
+      $("errs").innerHTML = '<p class="err" style="margin-bottom:12px">Completa ' + errs.join(", ") + '.</p>';
+      return;
+    }
+    $("errs").innerHTML = "";
+    v.foto = fotos.slice(); v.stato = "revisione"; v.miei = true; v.data = new Date().toISOString();
+    var ok = MV.addAnnuncio(v);
+    if (!ok) {
+      $("errs").innerHTML = '<p class="err" style="margin-bottom:12px">Non c\'è abbastanza spazio nel browser per salvare l\'annuncio. Prova con meno foto.</p>';
+      return;
+    }
+    $("done").innerHTML = '<div class="msg"><strong>Annuncio inviato.</strong> È in revisione: appena la gestione lo approva compare nel <a href="compra.html">catalogo</a>. Puoi seguirlo qui sotto o nella pagina <a href="gestione.html">Gestione vendite</a>.</div>';
+    fotos = [];
+    $("form").reset();
+    $("v-anno").value = 2020;
+    mostraFoto();
+    elenco();
+    $("done").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  /* i miei annunci */
+  function elenco() {
+    var mine = MV.annunci().filter(function (a) { return a.miei; }).sort(function (a, b) { return new Date(b.data) - new Date(a.data); });
+    var ul = $("mine");
+    if (!mine.length) {
+      ul.innerHTML = '<li style="justify-content:center;color:var(--muted)">Non hai ancora inviato annunci da questo browser.</li>';
+      return;
+    }
+    ul.innerHTML = mine.map(function (a) {
+      return '<li><div class="t"><strong>' + esc(a.marca) + ' ' + esc(a.modello) + '</strong><span class="note">' + MV.rif(a) + ' · inviato il ' + MV.fmtData(a.data) + '</span></div>' +
+        '<div class="r"><span class="mono">' + eur.format(a.prezzo) + '</span><span class="pill ' + a.stato + '">' + MV.STATI[a.stato] + '</span>' +
+        '<button class="btn danger small" type="button" data-del="' + a.id + '">Ritira</button></div></li>';
+    }).join("");
+  }
+  $("mine").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-del]");
+    if (!b) return;
+    if (b.getAttribute("data-sure") !== "1") {
+      b.setAttribute("data-sure", "1");
+      b.textContent = "Conferma il ritiro";
+      return;
+    }
+    MV.delAnnuncio(+b.getAttribute("data-del"));
+    elenco();
+  });
+
+  aggiorna();
+  elenco();
+})();
+</script>
+</body>
+</html>

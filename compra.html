@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Motorvia Compra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Compra: titolo, poi filtri a sinistra e griglia di annunci a destra; dettaglio in finestra. */
+.page-head { padding-block: 40px 28px; display: grid; gap: 10px; }
+.page-head h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; }
+.page-head p.lead { color: var(--muted); max-width: 60ch; }
+.catalog { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 32px; align-items: start; padding-bottom: 56px; }
+.filters { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 16px; }
+.filters h2 { font-size: 18px; }
+.range-row { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 13px; }
+.result-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; }
+.result-bar label { display: flex; align-items: center; gap: 8px; }
+.result-bar select { width: auto; }
+dialog { background: var(--surface); color: var(--ink); border: 1px solid var(--ink); border-radius: 12px; padding: 0; width: min(900px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow: auto; }
+dialog::backdrop { background: rgba(8, 14, 11, .6); }
+.dlg { display: grid; grid-template-columns: 1.05fr .95fr; }
+.dlg .left { background: linear-gradient(180deg, var(--bg), var(--line)); padding: 28px 22px; display: grid; align-content: start; gap: 16px; min-width: 0; }
+.dlg .left svg { width: 100%; height: auto; }
+.dlg .left .main-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block; }
+.thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.thumbs button { padding: 0; border: 2px solid var(--line); border-radius: 6px; overflow: hidden; width: 64px; height: 48px; cursor: pointer; background: var(--bg); }
+.thumbs button[aria-current="true"] { border-color: var(--accent); }
+.thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dlg .right { padding: 28px 24px; display: grid; gap: 16px; align-content: start; min-width: 0; }
+.dlg h2 { font-size: 30px; font-weight: 800; }
+.spec-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.spec-table th { text-align: left; font-weight: 500; color: var(--muted); padding: 6px 0; border-bottom: 1px solid var(--line); }
+.spec-table td { text-align: right; padding: 6px 0; border-bottom: 1px solid var(--line); font-family: var(--font-mono); font-size: 13px; }
+.opts { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
+.opts li { font-size: 12px; border: 1px solid var(--line); border-radius: 99px; padding: 3px 10px; background: var(--bg); }
+.contact-box { border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: grid; gap: 12px; background: var(--bg); }
+.contact-box h3 { font-size: 18px; }
+.seller { font-size: 14px; }
+.seller .mono { color: var(--muted); }
+.close { position: absolute; right: 10px; top: 10px; z-index: 2; background: var(--surface); border: 1px solid var(--line); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font: inherit; font-size: 20px; color: var(--ink); line-height: 1; }
+.close:hover { border-color: var(--ink); }
+footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color: var(--muted); font-size: 13px; }
+@media (max-width: 900px) {
+  .catalog, .dlg { grid-template-columns: 1fr; }
+  .page-head { padding-block: 28px 20px; }
+}
+@media (max-width: 480px) { .dlg .left, .dlg .right { padding: 22px 16px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="index.html">
+      <span class="plate" aria-hidden="true"><span class="eu">I</span><span class="num">MV 100 AU</span></span>
+      Motorvia
+    </a>
+    <nav class="main" aria-label="Principale">
+      <a href="compra.html" aria-current="page">Compra</a>
+      <a href="vendi.html">Vendi</a>
+      <a href="gestione.html">Gestione vendite</a>
+    </nav>
+  </header>
+
+  <div class="page-head">
+    <p class="eyebrow">Per chi compra</p>
+    <h1>Trova la tua prossima auto</h1>
+    <p class="lead">Filtra gli annunci per marca, modello, prezzo, anno, chilometri e alimentazione. Apri una scheda per leggere lo stato dell'auto e contattare il venditore.</p>
+  </div>
+
+  <div class="catalog">
+    <form class="filters" id="filters" aria-label="Filtri">
+      <h2>Filtri</h2>
+      <label for="f-text">Marca o modello
+        <input id="f-text" type="search" placeholder="Es. Golf, Panda, Q3">
+      </label>
+      <label for="f-marca">Marca
+        <select id="f-marca"><option value="">Tutte</option></select>
+      </label>
+      <label for="f-carb">Alimentazione
+        <select id="f-carb">
+          <option value="">Tutte</option>
+          <option>Benzina</option><option>Diesel</option><option>Ibrida</option><option>Elettrica</option><option>GPL</option>
+        </select>
+      </label>
+      <div>
+        <label for="f-prezzo">Prezzo massimo</label>
+        <input id="f-prezzo" type="range" min="5000" max="40000" step="500" value="40000">
+        <div class="range-row"><span>5.000 €</span><strong id="f-prezzo-out">40.000 €</strong></div>
+      </div>
+      <div>
+        <label for="f-km">Chilometri massimi</label>
+        <input id="f-km" type="range" min="10000" max="200000" step="5000" value="200000">
+        <div class="range-row"><span>10.000</span><strong id="f-km-out">200.000 km</strong></div>
+      </div>
+      <label for="f-anno">Anno di immatricolazione
+        <select id="f-anno"></select>
+      </label>
+      <button class="btn ghost" type="button" id="reset">Azzera filtri</button>
+    </form>
+
+    <div>
+      <div class="result-bar">
+        <p aria-live="polite"><strong id="count">0</strong> <span id="count-label">auto trovate</span></p>
+        <label for="sort">Ordina per
+          <select id="sort">
+            <option value="prezzo-asc">Prezzo, dal più basso</option>
+            <option value="prezzo-desc">Prezzo, dal più alto</option>
+            <option value="anno-desc">Più recenti</option>
+            <option value="km-asc">Meno chilometri</option>
+            <option value="data-desc">Ultimi annunci</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+
+  <footer class="foot">Gli annunci sono dati di esempio. Le richieste inviate arrivano alla pagina Gestione vendite.</footer>
+</div>
+
+<dialog id="dlg" aria-labelledby="dlg-title">
+  <button class="close" id="dlg-close" aria-label="Chiudi">×</button>
+  <div id="dlg-body"></div>
+</dialog>
+
+<script src="store.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = MV.esc, eur = MV.eur, nf = MV.nf;
+
+  function lista() { return MV.annunci().filter(function (c) { return c.stato === "pubblicato"; }); }
+
+  function popolaMarche() {
+    var cur = $("f-marca").value;
+    var marche = Array.from(new Set(lista().map(function (c) { return c.marca; }))).sort();
+    $("f-marca").innerHTML = '<option value="">Tutte</option>' + marche.map(function (m) { return '<option>' + esc(m) + '</option>'; }).join("");
+    if (marche.indexOf(cur) !== -1) $("f-marca").value = cur;
+  }
+  (function () {
+    var h = '<option value="0">Qualsiasi</option>';
+    for (var y = 2026; y >= 2016; y--) h += '<option value="' + y + '">Dal ' + y + '</option>';
+    $("f-anno").innerHTML = h;
+  })();
+  popolaMarche();
+
+  function filtrate() {
+    var t = $("f-text").value.trim().toLowerCase();
+    var marca = $("f-marca").value, carb = $("f-carb").value;
+    var pmax = +$("f-prezzo").value, kmax = +$("f-km").value, amin = +$("f-anno").value;
+    var l = lista().filter(function (c) {
+      if (marca && c.marca !== marca) return false;
+      if (carb && c.carb !== carb) return false;
+      if (c.prezzo > pmax) return false;
+      if (c.km > kmax) return false;
+      if (c.anno < amin) return false;
+      if (t && (c.marca + " " + c.modello + " " + (c.versione || "")).toLowerCase().indexOf(t) === -1) return false;
+      return true;
+    });
+    var s = $("sort").value;
+    l.sort(function (a, b) {
+      if (s === "prezzo-asc") return a.prezzo - b.prezzo;
+      if (s === "prezzo-desc") return b.prezzo - a.prezzo;
+      if (s === "anno-desc") return b.anno - a.anno || a.km - b.km;
+      if (s === "km-asc") return a.km - b.km;
+      return new Date(b.data) - new Date(a.data);
+    });
+    return l;
+  }
+
+  function render() {
+    $("f-prezzo-out").textContent = eur.format($("f-prezzo").value);
+    $("f-km-out").textContent = nf.format($("f-km").value) + " km";
+    var l = filtrate();
+    $("count").textContent = l.length;
+    $("count-label").textContent = l.length === 1 ? "auto trovata" : "auto trovate";
+    var g = $("grid");
+    if (!l.length) {
+      g.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>Nessuna auto corrisponde ai filtri scelti.</p><button class="btn ghost" type="button" id="empty-reset">Azzera filtri</button></div>';
+      $("empty-reset").addEventListener("click", reset);
+      return;
+    }
+    g.innerHTML = l.map(function (c) {
+      return '<button class="card" type="button" data-id="' + c.id + '">' + MV.cardInner(c) + '</button>';
+    }).join("");
+  }
+  function reset() {
+    $("f-text").value = ""; $("f-marca").value = ""; $("f-carb").value = "";
+    $("f-prezzo").value = 40000; $("f-km").value = 200000; $("f-anno").value = 0; $("sort").value = "prezzo-asc";
+    render();
+  }
+  ["f-text", "f-marca", "f-carb", "f-prezzo", "f-km", "f-anno", "sort"].forEach(function (id) {
+    $(id).addEventListener("input", render);
+    $(id).addEventListener("change", render);
+  });
+  $("reset").addEventListener("click", reset);
+  $("filters").addEventListener("submit", function (e) { e.preventDefault(); });
+
+  /* dettaglio */
+  var dlg = $("dlg");
+  function apri(id) {
+    var c = MV.annunci().filter(function (x) { return x.id === id; })[0];
+    if (!c) return;
+    var foto = c.foto || [];
+    var left = foto.length
+      ? '<img class="main-img" id="main-img" src="' + foto[0] + '" alt="Foto di ' + esc(c.marca) + ' ' + esc(c.modello) + '">' +
+        (foto.length > 1 ? '<div class="thumbs">' + foto.map(function (f, i) { return '<button type="button" data-i="' + i + '" aria-label="Foto ' + (i + 1) + '"' + (i === 0 ? ' aria-current="true"' : '') + '><img src="' + f + '" alt=""></button>'; }).join("") + '</div>' : '')
+      : MV.carSvg(c);
+    var opts = (c.opt && c.opt.length) ? '<ul class="opts">' + c.opt.map(function (o) { return '<li>' + esc(o) + '</li>'; }).join("") + '</ul>' : "";
+    var v = c.venditore || {};
+    $("dlg-body").innerHTML =
+      '<div class="dlg"><div class="left">' + left + '<p>' + esc(c.desc) + '</p>' + opts + '</div>' +
+      '<div class="right">' +
+      '<div><p class="eyebrow">' + esc(c.marca) + ' · ' + MV.rif(c) + '</p><h2 id="dlg-title" style="margin-top:6px">' + esc(c.modello) + '</h2><p class="note" style="margin-top:4px">' + esc(c.versione || "") + '</p></div>' +
+      '<p class="price" style="font-size:34px">' + eur.format(c.prezzo) + '</p>' +
+      '<table class="spec-table"><tbody>' +
+      '<tr><th>Immatricolazione</th><td>' + esc(c.anno) + '</td></tr>' +
+      '<tr><th>Chilometri</th><td>' + nf.format(c.km) + ' km</td></tr>' +
+      '<tr><th>Alimentazione</th><td>' + esc(c.carb) + '</td></tr>' +
+      '<tr><th>Cambio</th><td>' + esc(c.cambio) + '</td></tr>' +
+      (c.cv ? '<tr><th>Potenza</th><td>' + esc(c.cv) + ' CV</td></tr>' : '') +
+      '</tbody></table>' +
+      '<form class="contact-box" id="contact" novalidate>' +
+      '<h3>Contatta il venditore</h3>' +
+      '<p class="seller"><strong>' + esc(v.nome || "Venditore") + '</strong>' + (v.tel ? '<br><span class="mono">' + esc(v.tel) + '</span>' : '') + '</p>' +
+      '<label for="c-nome">Il tuo nome<input id="c-nome" type="text" autocomplete="name"></label>' +
+      '<label for="c-tel">Telefono<input id="c-tel" type="tel" autocomplete="tel"></label>' +
+      '<label for="c-mail">Email<input id="c-mail" type="email" autocomplete="email"></label>' +
+      '<label for="c-msg">Messaggio<textarea id="c-msg">Buongiorno, sono interessato a questa auto. È ancora disponibile?</textarea></label>' +
+      '<div id="c-out" aria-live="polite"></div>' +
+      '<button class="btn" type="submit">Invia la richiesta</button>' +
+      '</form></div></div>';
+
+    var main = $("main-img");
+    if (main) {
+      $("dlg-body").querySelectorAll(".thumbs button").forEach(function (b) {
+        b.addEventListener("click", function () {
+          main.src = foto[+b.getAttribute("data-i")];
+          $("dlg-body").querySelectorAll(".thumbs button").forEach(function (x) { x.removeAttribute("aria-current"); });
+          b.setAttribute("aria-current", "true");
+        });
+      });
+    }
+    $("contact").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var nome = $("c-nome").value.trim(), tel = $("c-tel").value.trim(), mail = $("c-mail").value.trim(), msg = $("c-msg").value.trim();
+      var out = $("c-out");
+      if (!nome || (!tel && !mail)) {
+        out.innerHTML = '<p class="err">Inserisci il tuo nome e almeno un recapito, telefono o email.</p>';
+        return;
+      }
+      MV.addRichiesta({ annuncioId: c.id, nome: nome, tel: tel, mail: mail, msg: msg, data: new Date().toISOString(), stato: "nuova" });
+      out.innerHTML = '<div class="msg" style="margin-top:0"><strong>Richiesta inviata.</strong> Il venditore ti risponderà al recapito indicato. La trovi anche nella pagina <a href="gestione.html">Gestione vendite</a>.</div>';
+      $("contact").querySelector("button[type=submit]").disabled = true;
+    });
+    dlg.showModal();
+  }
+  $("grid").addEventListener("click", function (e) {
+    var b = e.target.closest(".card");
+    if (b) apri(+b.getAttribute("data-id"));
+  });
+  $("dlg-close").addEventListener("click", function () { dlg.close(); });
+  dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+
+  render();
+})();
+</script>
+</body>
+</html>
