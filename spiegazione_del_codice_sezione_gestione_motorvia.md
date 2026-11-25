@@ -47,7 +47,3 @@ Per evitare operazioni accidentali, il codice utilizza un piccolo oggetto di mem
 * **Modulo di chiusura vendita:** Cliccando *Segna venduta*, non chiude subito la pratica ma apre una riga extra sotto l'auto in cui è obbligatorio inserire il prezzo finale concordato e il nome dell'acquirente prima di confermare.
 
 ---
-
-## 4. Schema riassuntivo per l'esposizione
-
-> *"La sezione Gestione funziona come una dashboard collegata alla memoria del browser (`localStorage`). Una funzione principale chiamata `gestione()` coordina quattro blocchi: aggiorna i contatori in alto, genera la tabella degli annunci con i relativi pulsanti di moderazione, mostra i messaggi dei clienti e calcola le statistiche delle vendite disegnando un grafico a barre degli ultimi 6 mesi. Ogni volta che clicchiamo su un'azione, il codice aggiorna i dati salvati e ridisegna automaticamente tutta la pagina, includendo doppie conferme per evitare eliminazioni per errore."*
