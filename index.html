@@ -1,825 +1,834 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Motorvia · Compravendita auto</title>
-<style>
-:root {
-  --bg: #fff; --soft: #f4f5f7; --ink: #1b1f24; --muted: #667085; --line: #dfe3e8;
-  --accent: #1f5eff; --accent-ink: #fff; --ok: #1a7f4b; --warn: #a15c00; --bad: #c0362c;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #14171b; --soft: #1d2127; --ink: #e8eaed; --muted: #9aa3ad; --line: #2e343c;
-    --accent: #6b95ff; --accent-ink: #0b1220; --ok: #5bd08f; --warn: #e8b84a; --bad: #ff8f80; color-scheme: dark; }
-}
-* { box-sizing: border-box; }
-[hidden] { display: none !important; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-h1, h2, h3, p, ul, ol { margin: 0; }
-h1 { font-size: 30px; line-height: 1.2; }
-h2 { font-size: 20px; }
-h3 { font-size: 17px; }
-a { color: var(--accent); }
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px 48px; }
-.muted { color: var(--muted); }
-.small { font-size: 13px; }
-.stack { display: grid; gap: 16px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motorvia · Compravendita auto</title>
+  <style>
+    :root {
+      --sfondo: #ffffff;
+      --sfondo-box: #f4f5f7;
+      --testo: #1b1f24;
+      --testo-chiaro: #667085;
+      --bordo: #dfe3e8;
+      --blu: #1f5eff;
+      --testo-blu: #ffffff;
+      --verde: #1a7f4b;
+      --arancio: #a15c00;
+      --rosso: #c0362c;
+    }
 
-/* intestazione */
-header.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; padding: 16px 0; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
-.brand { font-weight: 700; font-size: 20px; color: var(--ink); text-decoration: none; }
-nav { display: flex; gap: 4px; flex-wrap: wrap; }
-nav a { color: var(--muted); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 15px; }
-nav a:hover { background: var(--soft); }
-nav a[aria-current="page"] { background: var(--soft); color: var(--ink); font-weight: 600; }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --sfondo: #14171b;
+        --sfondo-box: #1d2127;
+        --testo: #e8eaed;
+        --testo-chiaro: #9aa3ad;
+        --bordo: #2e343c;
+        --blu: #6b95ff;
+        --testo-blu: #0b1220;
+        --verde: #5bd08f;
+        --arancio: #e8b84a;
+        --rosso: #ff8f80;
+      }
+    }
 
-/* controlli */
-label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); min-width: 0; }
-input, select, textarea { font: inherit; font-size: 15px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; width: 100%; min-width: 0; }
-input[type=range] { padding: 0; border: 0; accent-color: var(--accent); }
-textarea { resize: vertical; min-height: 80px; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.btn { font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 6px; padding: 9px 16px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); display: inline-block; text-decoration: none; text-align: center; }
-.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
-.btn.danger { background: transparent; color: var(--bad); border-color: var(--bad); }
-.btn.sm { padding: 4px 10px; font-size: 13px; }
-.btn:disabled { opacity: .5; cursor: default; }
-.box { background: var(--soft); border-radius: 8px; padding: 16px; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.full { grid-column: 1 / -1; }
-.err { color: var(--bad); font-size: 14px; }
-.ok { color: var(--ok); }
-.pill { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; white-space: nowrap; }
-.pill.pubblicato, .pill.gestita { color: var(--ok); }
-.pill.revisione, .pill.nuova { color: var(--warn); }
-.pill.venduto { color: var(--accent); }
-.pill.rifiutato { color: var(--bad); }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; background: var(--sfondo); color: var(--testo); font: 16px/1.5 system-ui, sans-serif; }
+    h1, h2, h3, p, ul { margin: 0; }
+    h1 { font-size: 30px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 17px; }
+    a { color: var(--blu); }
 
-/* home */
-.cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.door { display: grid; gap: 4px; padding: 20px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); text-decoration: none; }
-.door:hover { border-color: var(--accent); }
-.door span { color: var(--muted); }
-.team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; list-style: none; padding: 0; margin: 0; }
-.team li { border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; }
+    .contenitore { max-width: 1080px; margin: 0 auto; padding: 0 16px 48px; }
+    .testo-chiaro { color: var(--testo-chiaro); }
+    .piccolo { font-size: 13px; }
+    .colonna { display: grid; gap: 16px; }
+    .box { background: var(--sfondo-box); border-radius: 8px; padding: 16px; }
+    .griglia-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .tutta-larghezza { grid-column: 1 / -1; }
+    .successo { color: var(--verde); }
 
-/* catalogo */
-.catalog { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 24px; align-items: start; }
-.filters { display: grid; gap: 14px; }
-.row { display: flex; justify-content: space-between; font-size: 13px; }
-.bar-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; }
-.bar-top select { width: auto; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
-.card { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--bg); color: inherit; font: inherit; text-align: left; padding: 0; display: flex; flex-direction: column; min-width: 0; }
-button.card { cursor: pointer; }
-button.card:hover { border-color: var(--accent); }
-.art { aspect-ratio: 16 / 10; background: var(--soft); display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 14px; }
-.art img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--line); display: inline-block; }
-.card .body { padding: 12px 14px 14px; display: grid; gap: 4px; }
-.price { font-size: 22px; font-weight: 700; }
-.empty { border: 1px dashed var(--line); border-radius: 8px; padding: 32px; text-align: center; color: var(--muted); grid-column: 1 / -1; }
+    /* Menu in alto */
+    .intestazione { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--bordo); margin-bottom: 28px; }
+    .logo { font-weight: 700; font-size: 20px; color: var(--testo); text-decoration: none; }
+    nav { display: flex; gap: 4px; }
+    nav a { color: var(--testo-chiaro); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 15px; }
+    nav a.attivo { background: var(--sfondo-box); color: var(--testo); font-weight: 600; }
 
-/* dettaglio */
-dialog { background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 0; width: min(820px, calc(100% - 24px)); max-height: calc(100% - 24px); }
-dialog::backdrop { background: rgba(0, 0, 0, .5); }
-.dlg { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 24px; }
-.dlg .art { border-radius: 8px; overflow: hidden; }
-.close { float: right; margin: 8px 8px 0 0; }
-.thumbs { display: flex; gap: 6px; margin-top: 8px; }
-.thumbs button { width: 56px; height: 42px; padding: 0; border: 2px solid var(--line); border-radius: 4px; overflow: hidden; cursor: pointer; background: none; }
-.thumbs button[aria-current] { border-color: var(--accent); }
-.thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
-th { font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; }
-.r { text-align: right; }
-.tw { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
-.tw table { min-width: 720px; }
-.tw tr:last-child td { border-bottom: 0; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; list-style: none; }
-.chips li { font-size: 12px; background: var(--soft); border-radius: 99px; padding: 2px 10px; }
+    /* Form e Bottoni */
+    label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--testo-chiaro); }
+    input, select, textarea { font: inherit; font-size: 15px; color: var(--testo); background: var(--sfondo); border: 1px solid var(--bordo); border-radius: 6px; padding: 8px 10px; width: 100%; }
+    input[type="range"] { padding: 0; border: 0; accent-color: var(--blu); }
+    textarea { min-height: 80px; }
 
-/* vendi */
-.vendi { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, .7fr); gap: 24px; align-items: start; }
-fieldset { border: 0; padding: 0; margin: 0 0 20px; min-width: 0; }
-legend { font-weight: 700; font-size: 17px; padding: 0; margin-bottom: 10px; }
-.sw { display: flex; flex-wrap: wrap; gap: 8px; }
-.sw label { position: relative; display: block; }
-.sw input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
-.sw span { display: block; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); }
-.sw input:checked + span { outline: 2px solid var(--accent); outline-offset: 2px; }
-.sw input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
-.photos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.ph { position: relative; width: 88px; height: 66px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
-.ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.ph button { position: absolute; right: 2px; top: 2px; width: 22px; height: 22px; border: 0; border-radius: 50%; background: rgba(0, 0, 0, .7); color: #fff; cursor: pointer; }
-.list { list-style: none; padding: 0; display: grid; gap: 8px; }
-.list li { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+    .bottone { font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 6px; padding: 9px 16px; border: 1px solid var(--blu); background: var(--blu); color: var(--testo-blu); }
+    .bottone.secondario { background: transparent; color: var(--testo); border-color: var(--bordo); }
+    .bottone.pericolo { background: transparent; color: var(--rosso); border-color: var(--rosso); }
+    .bottone.piccolo { padding: 4px 10px; font-size: 13px; }
 
-/* gestione */
-.summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-.summary div { background: var(--soft); border-radius: 8px; padding: 12px 14px; display: grid; }
-.summary b { font-size: 24px; }
-.summary .warn b { color: var(--warn); }
-.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
-.tabs button { font: inherit; font-weight: 600; background: none; border: 0; border-bottom: 2px solid transparent; padding: 8px 14px; cursor: pointer; color: var(--muted); margin-bottom: -1px; }
-.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
-.toolbar { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
-.toolbar label { flex: 0 1 220px; }
-.acts { display: flex; flex-wrap: wrap; gap: 6px; }
-.soldf { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; background: var(--soft); }
-.soldf label { flex: 0 1 190px; }
-.req { border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: grid; gap: 6px; }
-.req header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.stats3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
-.stats3 div { background: var(--soft); border-radius: 8px; padding: 12px 14px; display: grid; }
-.stats3 b { font-size: 22px; }
-.bars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; align-items: end; height: 170px; border-bottom: 1px solid var(--line); margin-top: 10px; }
-.bar { display: grid; align-content: end; height: 100%; text-align: center; gap: 2px; font-size: 11px; color: var(--muted); }
-.bar i { display: block; background: var(--accent); border-radius: 3px 3px 0 0; min-height: 2px; }
-.months { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; text-align: center; font-size: 12px; color: var(--muted); margin: 4px 0 20px; }
+    .badge { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; }
+    .badge.pubblicato, .badge.gestita { color: var(--verde); }
+    .badge.revisione, .badge.nuova { color: var(--arancio); }
+    .badge.venduto { color: var(--blu); }
+    .badge.rifiutato { color: var(--rosso); }
 
-@media (max-width: 860px) {
-  .catalog, .vendi, .dlg { grid-template-columns: 1fr; }
-  .cards3, .team { grid-template-columns: 1fr 1fr; }
-    .summary { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 520px) {
-  .cards3, .team, .grid2, .stats3 { grid-template-columns: 1fr; }
-  h1 { font-size: 26px; }
-}
-</style>
+    /* Home */
+    .tre-colonne { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .riquadro-home { display: grid; gap: 4px; padding: 20px; border: 1px solid var(--bordo); border-radius: 8px; color: var(--testo); text-decoration: none; }
+    .riquadro-home span { color: var(--testo-chiaro); }
+    .lista-team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; list-style: none; padding: 0; }
+    .lista-team li { border: 1px solid var(--bordo); border-radius: 8px; padding: 12px; display: grid; }
+
+    /* Compra */
+    .layout-catalogo { display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start; }
+    .barra-superiore { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .griglia-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+    .card-auto { border: 1px solid var(--bordo); border-radius: 8px; overflow: hidden; background: var(--sfondo); color: inherit; font: inherit; text-align: left; padding: 0; display: flex; flex-direction: column; cursor: pointer; }
+    .immagine-auto { aspect-ratio: 16 / 10; background: var(--sfondo-box); display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--testo-chiaro); font-size: 14px; }
+    .immagine-auto img { width: 100%; height: 100%; object-fit: cover; }
+    .pallino-colore { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--bordo); }
+    .corpo-card { padding: 12px 14px; display: grid; gap: 4px; }
+    .prezzo { font-size: 22px; font-weight: 700; }
+    .vuoto { border: 1px dashed var(--bordo); border-radius: 8px; padding: 32px; text-align: center; color: var(--testo-chiaro); grid-column: 1 / -1; }
+
+    /* Popup Dettaglio */
+    dialog { background: var(--sfondo); color: var(--testo); border: 1px solid var(--bordo); border-radius: 10px; padding: 0; width: min(820px, calc(100% - 24px)); }
+    dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+    .contenuto-popup { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 24px; }
+    .chiudi-popup { float: right; margin: 10px 10px 0 0; }
+    .etichette-optional { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; list-style: none; }
+    .etichette-optional li { font-size: 12px; background: var(--sfondo-box); border-radius: 99px; padding: 2px 10px; }
+
+    /* Vendi */
+    .layout-vendi { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 24px; align-items: start; }
+    fieldset { border: 0; padding: 0; margin: 0 0 20px; }
+    legend { font-weight: 700; font-size: 17px; margin-bottom: 10px; }
+    .scelta-colori { display: flex; gap: 8px; }
+    .scelta-colori label { position: relative; cursor: pointer; }
+    .scelta-colori input { position: absolute; opacity: 0; }
+    .scelta-colori span { display: block; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--bordo); }
+    .scelta-colori input:checked + span { outline: 2px solid var(--blu); outline-offset: 2px; }
+    .anteprima-foto { display: flex; gap: 8px; margin-top: 8px; }
+    .box-foto { position: relative; width: 88px; height: 66px; border-radius: 6px; overflow: hidden; border: 1px solid var(--bordo); }
+    .box-foto img { width: 100%; height: 100%; object-fit: cover; }
+    .box-foto button { position: absolute; right: 2px; top: 2px; width: 22px; height: 22px; border: 0; border-radius: 50%; background: rgba(0, 0, 0, 0.7); color: #fff; cursor: pointer; }
+    .lista-miei-annunci { list-style: none; padding: 0; display: grid; gap: 8px; }
+    .lista-miei-annunci li { border: 1px solid var(--bordo); border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+
+    /* Gestione */
+    .riepilogo-numeri { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .riepilogo-numeri div { background: var(--sfondo-box); border-radius: 8px; padding: 12px 14px; display: grid; }
+    .riepilogo-numeri b { font-size: 24px; }
+    .riepilogo-numeri .avviso b { color: var(--arancio); }
+    .schede { display: flex; gap: 4px; border-bottom: 1px solid var(--bordo); margin-bottom: 16px; }
+    .schede button { font: inherit; font-weight: 600; background: none; border: 0; border-bottom: 2px solid transparent; padding: 8px 14px; cursor: pointer; color: var(--testo-chiaro); }
+    .schede button.attiva { color: var(--testo); border-bottom-color: var(--blu); }
+    .barra-filtri-tabella { display: flex; gap: 12px; margin-bottom: 12px; }
+    .contenitore-tabella { overflow-x: auto; border: 1px solid var(--bordo); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--bordo); }
+    th { font-size: 12px; color: var(--testo-chiaro); }
+    .destra { text-align: right; }
+    .card-richiesta { border: 1px solid var(--bordo); border-radius: 8px; padding: 14px; display: grid; gap: 6px; }
+    .card-richiesta header { display: flex; justify-content: space-between; }
+
+    /* Grafico */
+    .grafico-barre { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; align-items: end; height: 170px; border-bottom: 1px solid var(--bordo); margin-top: 10px; }
+    .colonna-barra { display: grid; align-content: end; height: 100%; text-align: center; gap: 4px; font-size: 11px; color: var(--testo-chiaro); }
+    .colonna-barra i { display: block; background: var(--blu); border-radius: 4px 4px 0 0; min-height: 2px; }
+    .nomi-mesi { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; text-align: center; font-size: 12px; color: var(--testo-chiaro); margin: 4px 0 20px; }
+
+    @media (max-width: 860px) {
+      .layout-catalogo, .layout-vendi, .contenuto-popup { grid-template-columns: 1fr; }
+      .tre-colonne, .lista-team, .riepilogo-numeri { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <a class="brand" href="#home">Motorvia</a>
-    <nav aria-label="Principale">
-      <a href="#home" data-nav="home">Home</a>
-      <a href="#compra" data-nav="compra">Compra</a>
-      <a href="#vendi" data-nav="vendi">Vendi</a>
-      <a href="#gestione" data-nav="gestione">Gestione</a>
+
+<div class="contenitore">
+  <header class="intestazione">
+    <a class="logo" href="#home">Motorvia</a>
+    <nav>
+      <a href="#home" id="link-home">Home</a>
+      <a href="#compra" id="link-compra">Compra</a>
+      <a href="#vendi" id="link-vendi">Vendi</a>
+      <a href="#gestione" id="link-gestione">Gestione</a>
     </nav>
   </header>
 
   <!-- HOME -->
-  <main id="p-home" class="stack" hidden>
-    <div class="stack">
+  <main id="pagina-home" class="colonna">
+    <div class="colonna">
       <h1>Compra, vendi e gestisci auto in un solo posto</h1>
-      <p class="muted">Un annuncio pubblicato passa dalla revisione, compare nel catalogo e, quando arriva un contatto, lo trovi nella gestione.</p>
+      <p class="testo-chiaro">Un annuncio pubblicato passa dalla revisione, compare nel catalogo e, quando arriva un contatto, lo trovi nella gestione.</p>
     </div>
-    <div class="cards3">
-      <a class="door" href="#compra"><h2>Compra</h2><span id="n-vendita"></span></a>
-      <a class="door" href="#vendi"><h2>Vendi</h2><span id="n-revisione"></span></a>
-      <a class="door" href="#gestione"><h2>Gestione</h2><span id="n-richieste"></span></a>
+    <div class="tre-colonne">
+      <a class="riquadro-home" href="#compra"><h2>Compra</h2><span id="home-num-vendita"></span></a>
+      <a class="riquadro-home" href="#vendi"><h2>Vendi</h2><span id="home-num-revisione"></span></a>
+      <a class="riquadro-home" href="#gestione"><h2>Gestione</h2><span id="home-num-richieste"></span></a>
     </div>
-    <div class="stack">
+    <div class="colonna">
       <h2>Gruppo di lavoro</h2>
-      <ul class="team">
-        <li><b>Alessandro Locatelli</b><span class="muted small">Project Manager</span></li>
-        <li><b>Lorenzo Decarolis</b><span class="muted small">Sviluppatore</span></li>
-        <li><b>Andrea Vitale</b><span class="muted small">Sviluppatore</span></li>
-        <li><b>Filippo Ciocca</b><span class="muted small">Sviluppatore</span></li>
+      <ul class="lista-team">
+        <li><b>Alessandro Locatelli</b><span class="testo-chiaro piccolo">Project Manager</span></li>
+        <li><b>Lorenzo Decarolis</b><span class="testo-chiaro piccolo">Sviluppatore</span></li>
+        <li><b>Andrea Vitale</b><span class="testo-chiaro piccolo">Sviluppatore</span></li>
+        <li><b>Filippo Ciocca</b><span class="testo-chiaro piccolo">Sviluppatore</span></li>
       </ul>
     </div>
   </main>
 
   <!-- COMPRA -->
-  <main id="p-compra" class="stack" hidden>
+  <main id="pagina-compra" class="colonna" hidden>
     <h1>Trova la tua prossima auto</h1>
-    <div class="catalog">
-      <form class="filters box" id="filters" aria-label="Filtri">
+    <div class="layout-catalogo">
+      <form class="colonna box" id="form-filtri">
         <h2>Filtri</h2>
-        <label>Marca o modello<input id="f-text" type="search" placeholder="Es. Golf, Panda"></label>
-        <label>Marca<select id="f-marca"></select></label>
+        <label>Marca o modello<input id="filtro-testo" type="search" placeholder="Es. Golf, Panda"></label>
+        <label>Marca<select id="filtro-marca"></select></label>
         <label>Alimentazione
-          <select id="f-carb"><option value="">Tutte</option><option>Benzina</option><option>Diesel</option><option>Ibrida</option><option>Elettrica</option><option>GPL</option></select>
+          <select id="filtro-carburante">
+            <option value="">Tutte</option><option>Benzina</option><option>Diesel</option><option>Ibrida</option><option>Elettrica</option><option>GPL</option>
+          </select>
         </label>
         <label>Prezzo massimo
-          <input id="f-prezzo" type="range" min="5000" max="40000" step="500" value="40000">
-          <span class="row"><span>5.000 €</span><b id="f-prezzo-out"></b></span>
+          <input id="filtro-prezzo" type="range" min="5000" max="40000" step="500" value="40000">
+          <div style="display:flex; justify-content:space-between;"><span>5.000 €</span><b id="testo-prezzo-max"></b></div>
         </label>
         <label>Chilometri massimi
-          <input id="f-km" type="range" min="10000" max="200000" step="5000" value="200000">
-          <span class="row"><span>10.000</span><b id="f-km-out"></b></span>
+          <input id="filtro-km" type="range" min="10000" max="200000" step="5000" value="200000">
+          <div style="display:flex; justify-content:space-between;"><span>10.000</span><b id="testo-km-max"></b></div>
         </label>
-        <label>Anno di immatricolazione<select id="f-anno"></select></label>
-        <button class="btn ghost" type="button" id="f-reset">Azzera filtri</button>
+        <label>Anno di immatricolazione<select id="filtro-anno"></select></label>
+        <button class="bottone secondario" type="button" onclick="azzeraFiltri()">Azzera filtri</button>
       </form>
+
       <div>
-        <div class="bar-top">
-          <p aria-live="polite"><b id="count">0</b> <span id="count-label">auto trovate</span></p>
-          <label style="display:flex;align-items:center;gap:8px">Ordina per
-            <select id="sort">
+        <div class="barra-superiore">
+          <p><b id="conteggio-auto">0</b> auto trovate</p>
+          <label style="display:flex; align-items:center; gap:8px;">Ordina per
+            <select id="ordinamento" style="width:auto;">
               <option value="prezzo-asc">Prezzo, dal più basso</option>
               <option value="prezzo-desc">Prezzo, dal più alto</option>
               <option value="anno-desc">Più recenti</option>
               <option value="km-asc">Meno chilometri</option>
-              <option value="data-desc">Ultimi annunci</option>
             </select>
           </label>
         </div>
-        <div class="grid" id="grid"></div>
+        <div class="griglia-auto" id="griglia-catalogo"></div>
       </div>
     </div>
   </main>
 
   <!-- VENDI -->
-  <main id="p-vendi" class="stack" hidden>
+  <main id="pagina-vendi" class="colonna" hidden>
     <h1>Pubblica il tuo annuncio</h1>
-    <div class="vendi">
-      <form id="form" novalidate>
+    <div class="layout-vendi">
+      <form id="form-vendi">
         <fieldset>
           <legend>L'auto</legend>
-          <div class="grid2">
-            <label>Marca<input id="v-marca" list="marche" placeholder="Es. Fiat" autocomplete="off"></label>
-            <label>Modello<input id="v-modello" placeholder="Es. Panda"></label>
-            <label class="full">Versione<input id="v-versione" placeholder="Es. 1.0 Hybrid City Life"></label>
-            <label>Anno<select id="v-anno"></select></label>
-            <label>Chilometri<input id="v-km" type="number" min="0" max="500000" step="1000" value="60000"></label>
-            <label>Alimentazione<select id="v-carb"><option>Benzina</option><option>Diesel</option><option>Ibrida</option><option>Elettrica</option><option>GPL</option></select></label>
-            <label>Cambio<select id="v-cambio"><option>Manuale</option><option>Automatico</option></select></label>
-            <label>Potenza (CV)<input id="v-cv" type="number" min="20" max="900" value="90"></label>
-            <label>Carrozzeria
-              <select id="v-tipo"><option value="utilitaria">Utilitaria</option><option value="berlina" selected>Berlina</option><option value="suv">SUV</option><option value="station">Station wagon</option></select>
+          <div class="griglia-2">
+            <label>Marca<input id="vendi-marca" placeholder="Es. Fiat" required></label>
+            <label>Modello<input id="vendi-modello" placeholder="Es. Panda" required></label>
+            <label class="tutta-larghezza">Versione<input id="vendi-versione" placeholder="Es. 1.0 Hybrid City Life"></label>
+            <label>Anno<select id="vendi-anno"></select></label>
+            <label>Chilometri<input id="vendi-km" type="number" value="60000"></label>
+            <label>Alimentazione
+              <select id="vendi-carburante"><option>Benzina</option><option>Diesel</option><option>Ibrida</option><option>Elettrica</option><option>GPL</option></select>
             </label>
-            <div class="full"><p class="small muted" style="font-weight:600;margin-bottom:6px">Colore</p><div class="sw" id="swatches"></div></div>
+            <label>Cambio
+              <select id="vendi-cambio"><option>Manuale</option><option>Automatico</option></select>
+            </label>
+            <label>Potenza (CV)<input id="vendi-cv" type="number" value="90"></label>
+            <label>Carrozzeria
+              <select id="vendi-tipo">
+                <option value="utilitaria">Utilitaria</option><option value="berlina" selected>Berlina</option><option value="suv">SUV</option><option value="station">Station wagon</option>
+              </select>
+            </label>
+            <div class="tutta-larghezza">
+              <p class="piccolo testo-chiaro" style="font-weight:600; margin-bottom:6px;">Colore</p>
+              <div class="scelta-colori" id="contenitore-colori"></div>
+            </div>
           </div>
-          <datalist id="marche"><option>Abarth</option><option>Alfa Romeo</option><option>Audi</option><option>BMW</option><option>Citroën</option><option>Dacia</option><option>Fiat</option><option>Ford</option><option>Honda</option><option>Hyundai</option><option>Jeep</option><option>Kia</option><option>Lancia</option><option>Mercedes-Benz</option><option>Mini</option><option>Nissan</option><option>Opel</option><option>Peugeot</option><option>Renault</option><option>Seat</option><option>Skoda</option><option>Tesla</option><option>Toyota</option><option>Volkswagen</option><option>Volvo</option></datalist>
         </fieldset>
+
         <fieldset>
           <legend>Prezzo e stato</legend>
-          <div class="grid2">
-            <label class="full">Prezzo in euro<input id="v-prezzo" type="number" min="0" step="100" placeholder="Es. 9500"><span class="small muted" id="v-hint"></span></label>
-            <label class="full">Descrizione dello stato<textarea id="v-desc" placeholder="Tagliandi, proprietari, danni, gomme, garanzia…"></textarea></label>
-            <label class="full">Dotazioni, separate da virgola<input id="v-opt" placeholder="Es. Navigatore, Sensori di parcheggio"></label>
+          <div class="griglia-2">
+            <label class="tutta-larghezza">Prezzo in euro
+              <input id="vendi-prezzo" type="number" placeholder="Es. 9500" required>
+              <span class="piccolo testo-chiaro" id="suggerimento-prezzo"></span>
+            </label>
+            <label class="tutta-larghezza">Descrizione dello stato<textarea id="vendi-descrizione" required></textarea></label>
+            <label class="tutta-larghezza">Dotazioni, separate da virgola<input id="vendi-optional" placeholder="Es. Navigatore, Sensori di parcheggio"></label>
           </div>
         </fieldset>
+
         <fieldset>
           <legend>Foto</legend>
-          <label>Fino a 3 foto<input id="v-foto" type="file" accept="image/*" multiple></label>
-          <div class="photos" id="photos"></div>
+          <label>Fino a 3 foto<input id="vendi-foto" type="file" accept="image/*" multiple></label>
+          <div class="anteprima-foto" id="contenitore-foto"></div>
         </fieldset>
+
         <fieldset>
           <legend>Contatti</legend>
-          <div class="grid2">
-            <label class="full">Nome e cognome<input id="v-nome" autocomplete="name"></label>
-            <label>Telefono<input id="v-tel" type="tel" autocomplete="tel"></label>
-            <label>Email<input id="v-mail" type="email" autocomplete="email"></label>
+          <div class="griglia-2">
+            <label class="tutta-larghezza">Nome e cognome<input id="vendi-nome" required></label>
+            <label>Telefono<input id="vendi-telefono" type="tel"></label>
+            <label>Email<input id="vendi-email" type="email"></label>
           </div>
         </fieldset>
-        <div id="errs" aria-live="polite"></div>
-        <button class="btn" type="submit">Invia alla revisione</button>
-        <div id="done" aria-live="polite"></div>
+
+        <button class="bottone" type="submit">Invia alla revisione</button>
+        <div id="messaggio-conferma"></div>
       </form>
-      <aside class="stack" aria-label="Anteprima">
+
+      <aside class="colonna">
         <h2>Anteprima</h2>
-        <div class="card" id="preview"></div>
-        <p class="small muted">Compare nel catalogo dopo l'approvazione della gestione.</p>
+        <div class="card-auto" id="card-anteprima"></div>
+        <p class="piccolo testo-chiaro">Compare nel catalogo dopo l'approvazione della gestione.</p>
       </aside>
     </div>
-    <div class="stack">
+
+    <div class="colonna">
       <h2>I tuoi annunci</h2>
-      <ul class="list" id="mine"></ul>
+      <ul class="lista-miei-annunci" id="lista-miei-annunci"></ul>
     </div>
   </main>
 
   <!-- GESTIONE -->
-  <main id="p-gestione" hidden>
-    <h1 style="margin-bottom:16px">Gestione vendite</h1>
-    <div class="summary" id="summary"></div>
-    <div class="tabs" role="tablist">
-      <button role="tab" id="tab-annunci" data-tab="annunci" aria-selected="true">Annunci</button>
-      <button role="tab" id="tab-richieste" data-tab="richieste" aria-selected="false">Richieste</button>
-      <button role="tab" id="tab-vendite" data-tab="vendite" aria-selected="false">Vendite</button>
+  <main id="pagina-gestione" hidden>
+    <h1 style="margin-bottom:16px;">Gestione vendite</h1>
+    <div class="riepilogo-numeri" id="riepilogo-gestione"></div>
+
+    <div class="schede">
+      <button id="tab-annunci" class="attiva" onclick="cambiaScheda('annunci')">Annunci</button>
+      <button id="tab-richieste" onclick="cambiaScheda('richieste')">Richieste</button>
+      <button id="tab-vendite" onclick="cambiaScheda('vendite')">Vendite</button>
     </div>
 
-    <div id="g-annunci">
-      <div class="toolbar">
+    <div id="sezione-annunci">
+      <div class="barra-filtri-tabella">
         <label>Stato
-          <select id="a-stato"><option value="">Tutti</option><option value="revisione">In revisione</option><option value="pubblicato">In vendita</option><option value="venduto">Vendute</option><option value="rifiutato">Non pubblicate</option></select>
+          <select id="gestione-filtro-stato">
+            <option value="">Tutti</option><option value="revisione">In revisione</option><option value="pubblicato">In vendita</option><option value="venduto">Vendute</option><option value="rifiutato">Non pubblicate</option>
+          </select>
         </label>
-        <label>Cerca<input id="a-q" type="search" placeholder="Marca, modello, venditore"></label>
+        <label>Cerca<input id="gestione-cerca" type="search" placeholder="Marca, modello, venditore"></label>
       </div>
-      <div class="tw"><table>
-        <thead><tr><th>Rif.</th><th>Auto</th><th>Venditore</th><th class="r">Prezzo</th><th>Stato</th><th>Azioni</th></tr></thead>
-        <tbody id="a-body"></tbody>
-      </table></div>
+      <div class="contenitore-tabella">
+        <table>
+          <thead><tr><th>Rif.</th><th>Auto</th><th>Venditore</th><th class="destra">Prezzo</th><th>Stato</th><th>Azioni</th></tr></thead>
+          <tbody id="tabella-annunci"></tbody>
+        </table>
+      </div>
     </div>
 
-    <div id="g-richieste" hidden>
-      <div class="toolbar">
-        <label>Mostra<select id="r-stato"><option value="">Tutte</option><option value="nuova">Solo nuove</option><option value="gestita">Gestite</option></select></label>
+    <div id="sezione-richieste" hidden>
+      <div class="barra-filtri-tabella">
+        <label>Mostra
+          <select id="gestione-filtro-richieste">
+            <option value="">Tutte</option><option value="nuova">Solo nuove</option><option value="gestita">Gestite</option>
+          </select>
+        </label>
       </div>
-      <div class="stack" id="r-list"></div>
+      <div class="colonna" id="lista-richieste"></div>
     </div>
 
-    <div id="g-vendite" hidden>
-      <div class="stats3" id="v-stats"></div>
+    <div id="sezione-vendite" hidden>
+      <div class="tre-colonne" style="margin-bottom:16px;" id="statistiche-vendite"></div>
       <h3>Incassi degli ultimi 6 mesi</h3>
-      <div class="bars" id="v-bars"></div>
-      <div class="months" id="v-months"></div>
-      <div class="tw"><table>
-        <thead><tr><th>Data</th><th>Auto</th><th>Acquirente</th><th class="r">Richiesto</th><th class="r">Venduto</th><th class="r">Differenza</th></tr></thead>
-        <tbody id="v-body"></tbody>
-      </table></div>
+      <div class="grafico-barre" id="grafico-barre"></div>
+      <div class="nomi-mesi" id="etichette-mesi"></div>
+      <div class="contenitore-tabella">
+        <table>
+          <thead><tr><th>Data</th><th>Auto</th><th>Acquirente</th><th class="destra">Richiesto</th><th class="destra">Venduto</th><th class="destra">Differenza</th></tr></thead>
+          <tbody id="tabella-vendite"></tbody>
+        </table>
+      </div>
     </div>
 
-    <p style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center">
-      <button class="btn ghost sm" type="button" id="g-reset">Ripristina i dati di esempio</button>
-      <span class="small muted" id="g-reset-note">Cancella annunci e richieste inseriti in questo browser.</span>
+    <p style="margin-top:28px;">
+      <button class="bottone secondario piccolo" type="button" onclick="ripristinaDati()">Ripristina i dati di esempio</button>
     </p>
   </main>
-
-  <p class="small muted" style="margin-top:40px;border-top:1px solid var(--line);padding-top:16px">Motorvia · Dati di esempio salvati solo nel tuo browser.</p>
 </div>
 
-<dialog id="dlg" aria-label="Dettaglio auto">
-  <button class="btn ghost sm close" id="dlg-close" type="button" aria-label="Chiudi">Chiudi</button>
-  <div id="dlg-body"></div>
+<!-- POPUP DETTAGLIO -->
+<dialog id="popup-auto">
+  <button class="bottone secondario piccolo chiudi-popup" type="button" onclick="document.getElementById('popup-auto').close()">Chiudi</button>
+  <div id="corpo-popup"></div>
 </dialog>
 
 <script>
-(function () {
-  "use strict";
-  var $ = function (id) { return document.getElementById(id); };
+  // =========================================================================
+  // 1. DATI INIZIALI E MEMORIA DEL BROWSER (localStorage)
+  // =========================================================================
+  function giorniFa(n) {
+    const d = new Date();
+    d.setDate(d.getDate() - n);
+    return d.toISOString();
+  }
 
-  /* ========== DATI ========== */
-  var KA = "motorvia.annunci.v1", KR = "motorvia.richieste.v1", memA = null, memR = null;
-  function load(k) { try { var s = localStorage.getItem(k); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
-  function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
-  function daysAgo(n) { var d = new Date(); d.setDate(d.getDate() - n); return d.toISOString(); }
-
-  var SELLERS = [
-    { nome: "Marco Ferri", tel: "+39 333 000 0101", mail: "marco.ferri@esempio.it" },
-    { nome: "Giulia Conti", tel: "+39 333 000 0102", mail: "giulia.conti@esempio.it" },
-    { nome: "Paolo Riva", tel: "+39 333 000 0103", mail: "paolo.riva@esempio.it" },
-    { nome: "Elena Gatti", tel: "+39 333 000 0104", mail: "elena.gatti@esempio.it" },
-    { nome: "Davide Longo", tel: "+39 333 000 0105", mail: "davide.longo@esempio.it" },
-    { nome: "Sara Moretti", tel: "+39 333 000 0106", mail: "sara.moretti@esempio.it" }
+  const AUTO_INIZIALI = [
+    { id: 1, marca: "Fiat", modello: "Panda", versione: "1.0 Hybrid City Life", anno: 2022, km: 28400, prezzo: 12900, carb: "Ibrida", cambio: "Manuale", cv: 70, tipo: "utilitaria", colore: "#9AA3A8", desc: "Una sola proprietaria, tagliandi in concessionaria.", opt: ["Clima manuale", "Bluetooth"], stato: "pubblicato", venditore: { nome: "Marco Ferri", tel: "+39 333 000 0101" }, foto: [], mio: false, data: giorniFa(6) },
+    { id: 2, marca: "Volkswagen", modello: "Golf", versione: "2.0 TDI Life", anno: 2020, km: 76200, prezzo: 17400, carb: "Diesel", cambio: "Automatico", cv: 150, tipo: "berlina", colore: "#2B4C7E", desc: "Cambio DSG, cronologia tagliandi completa.", opt: ["Navigatore", "Apple CarPlay"], stato: "pubblicato", venditore: { nome: "Giulia Conti", tel: "+39 333 000 0102" }, foto: [], mio: false, data: giorniFa(20) },
+    { id: 3, marca: "Toyota", modello: "Yaris", versione: "1.5 Hybrid Active", anno: 2021, km: 41800, prezzo: 15600, carb: "Ibrida", cambio: "Automatico", cv: 116, tipo: "utilitaria", colore: "#B8322B", desc: "Consumi reali sotto i 5 litri ogni 100 km.", opt: ["Telecamera posteriore", "Android Auto"], stato: "pubblicato", venditore: { nome: "Paolo Riva", tel: "+39 333 000 0103" }, foto: [], mio: false, data: giorniFa(14) },
+    { id: 4, marca: "Audi", modello: "Q3", versione: "35 TDI Business", anno: 2019, km: 98700, prezzo: 21900, carb: "Diesel", cambio: "Automatico", cv: 150, tipo: "suv", colore: "#23282B", desc: "Ben tenuta, interni in ottimo stato.", opt: ["Virtual cockpit", "Sedili riscaldati"], stato: "pubblicato", venditore: { nome: "Elena Gatti", tel: "+39 333 000 0104" }, foto: [], mio: false, data: giorniFa(25) },
+    { id: 5, marca: "Renault", modello: "Clio", versione: "1.0 TCe GPL Zen", anno: 2021, km: 52300, prezzo: 11800, carb: "GPL", cambio: "Manuale", cv: 100, tipo: "utilitaria", colore: "#E08A1E", desc: "Doppia alimentazione benzina e GPL.", opt: ["Schermo 7\"", "Cerchi in lega"], stato: "pubblicato", venditore: { nome: "Davide Longo", tel: "+39 333 000 0105" }, foto: [], mio: false, data: giorniFa(9) },
+    { id: 6, marca: "Tesla", modello: "Model 3", versione: "Long Range", anno: 2021, km: 54600, prezzo: 32900, carb: "Elettrica", cambio: "Automatico", cv: 440, tipo: "berlina", colore: "#E9ECEE", desc: "Autonomia dichiarata oltre 500 km.", opt: ["Autopilot", "Tetto in vetro"], stato: "pubblicato", venditore: { nome: "Marco Ferri", tel: "+39 333 000 0101" }, foto: [], mio: false, data: giorniFa(4) },
+    { id: 7, marca: "Toyota", modello: "Corolla Touring", versione: "1.8 Hybrid", anno: 2020, km: 68700, prezzo: 18900, carb: "Ibrida", cambio: "Automatico", cv: 122, tipo: "station", colore: "#9AA3A8", desc: "Bagagliaio da 598 litri, consumi contenuti.", opt: ["Clima bizona"], stato: "revisione", venditore: { nome: "Elena Gatti", tel: "+39 333 000 0104" }, foto: [], mio: false, data: giorniFa(1) },
+    { id: 8, marca: "BMW", modello: "Serie 1", versione: "118i Business", anno: 2023, km: 14200, prezzo: 26700, carb: "Benzina", cambio: "Automatico", cv: 140, tipo: "berlina", colore: "#8B2E3A", desc: "Quasi nuova, garanzia residua.", opt: ["Head-up display"], stato: "venduto", venditore: { nome: "Sara Moretti", tel: "+39 333 000 0106" }, foto: [], mio: false, data: giorniFa(40), prezzoVendita: 25900, dataVendita: giorniFa(9), acquirente: "Luca Bassi" },
+    { id: 9, marca: "Fiat", modello: "Tipo", versione: "1.6 Mjt Easy", anno: 2019, km: 71000, prezzo: 10400, carb: "Diesel", cambio: "Manuale", cv: 120, tipo: "berlina", colore: "#9AA3A8", desc: "Berlina spaziosa.", opt: ["Cruise control"], stato: "venduto", venditore: { nome: "Marco Ferri", tel: "+39 333 000 0101" }, foto: [], mio: false, data: giorniFa(80), prezzoVendita: 9900, dataVendita: giorniFa(38), acquirente: "Anna Greco" },
+    { id: 10, marca: "Peugeot", modello: "208", versione: "1.2 Allure", anno: 2020, km: 39800, prezzo: 12900, carb: "Benzina", cambio: "Manuale", cv: 82, tipo: "utilitaria", colore: "#2B4C7E", desc: "Ottime condizioni.", opt: ["Sensori posteriori"], stato: "venduto", venditore: { nome: "Giulia Conti", tel: "+39 333 000 0102" }, foto: [], mio: false, data: giorniFa(70), prezzoVendita: 12400, dataVendita: giorniFa(65), acquirente: "Matteo Serra" }
   ];
 
-  function seedA() {
-    var rows = [
-      [1, "Fiat", "Panda", "1.0 Hybrid City Life", 2022, 28400, 12900, "Ibrida", "Manuale", 70, "utilitaria", "#9AA3A8", "Una sola proprietaria, tagliandi in concessionaria. Adatta alla città e ai parcheggi stretti.", ["Clima manuale", "Bluetooth", "Sensori di parcheggio"], "pubblicato", 0, 6],
-      [2, "Volkswagen", "Golf", "2.0 TDI Life", 2020, 76200, 17400, "Diesel", "Automatico", 150, "berlina", "#2B4C7E", "Cambio DSG, cronologia tagliandi completa. Ottima per chi fa molta autostrada.", ["Navigatore", "Cruise adattivo", "Apple CarPlay"], "pubblicato", 1, 20],
-      [3, "Toyota", "Yaris", "1.5 Hybrid Active", 2021, 41800, 15600, "Ibrida", "Automatico", 116, "utilitaria", "#B8322B", "Consumi reali sotto i 5 litri ogni 100 km. Garanzia batteria ibrida ancora attiva.", ["Telecamera posteriore", "Clima automatico", "Android Auto"], "pubblicato", 2, 14],
-      [4, "Audi", "Q3", "35 TDI S tronic Business", 2019, 98700, 21900, "Diesel", "Automatico", 150, "suv", "#23282B", "Ben tenuta, interni in ottimo stato. Quattro tagliandi documentati.", ["Virtual cockpit", "Sedili riscaldati", "Portellone elettrico"], "pubblicato", 3, 25],
-      [5, "Renault", "Clio", "1.0 TCe GPL Zen", 2021, 52300, 11800, "GPL", "Manuale", 100, "utilitaria", "#E08A1E", "Doppia alimentazione benzina e GPL, ideale per ridurre la spesa di carburante.", ["Schermo 7\"", "Clima automatico", "Cerchi in lega"], "pubblicato", 4, 9],
-      [6, "BMW", "Serie 3 Touring", "320d xDrive Business", 2018, 121000, 19800, "Diesel", "Automatico", 190, "station", "#9AA3A8", "Station wagon con trazione integrale. Tagliandi BMW e gomme invernali incluse.", ["Trazione integrale", "Navigatore", "Gancio traino"], "pubblicato", 5, 31],
-      [7, "Tesla", "Model 3", "Long Range Dual Motor", 2021, 54600, 32900, "Elettrica", "Automatico", 440, "berlina", "#E9ECEE", "Autonomia dichiarata oltre 500 km. Salute della batteria certificata in officina.", ["Autopilot", "Tetto in vetro", "Ricarica rapida"], "pubblicato", 0, 4],
-      [8, "Fiat", "500", "1.2 Lounge", 2017, 63100, 8200, "Benzina", "Manuale", 69, "utilitaria", "#7FB5C9", "Tetto panoramico, neopatentati ammessi. Perfetta come seconda auto.", ["Tetto panoramico", "Radio con USB", "Cerchi in lega"], "pubblicato", 1, 18],
-      [9, "Volkswagen", "Tiguan", "1.5 TSI Life DSG", 2022, 33900, 28500, "Benzina", "Automatico", 150, "suv", "#5D6B50", "SUV compatto con ottimo spazio per famiglia. Ancora coperto da garanzia ufficiale fino a fine anno.", ["Cruise adattivo", "Telecamera 360°", "Fari matrix LED"], "pubblicato", 2, 12],
-      [10, "Toyota", "Corolla Touring Sports", "1.8 Hybrid Business", 2020, 68700, 18900, "Ibrida", "Automatico", 122, "station", "#9AA3A8", "Bagagliaio da 598 litri, consumi contenuti anche in autostrada.", ["Safety Sense", "Clima bizona", "Android Auto"], "revisione", 3, 1],
-      [11, "Renault", "Captur", "1.5 Blue dCi Intens", 2019, 87400, 13600, "Diesel", "Manuale", 95, "suv", "#E08A1E", "Crossover con tetto a contrasto. Distribuzione e freni sostituiti di recente.", ["Navigatore", "Keycard", "Cerchi da 17\""], "pubblicato", 4, 7],
-      [12, "BMW", "Serie 1", "118i Business Advantage", 2023, 14200, 26700, "Benzina", "Automatico", 140, "berlina", "#8B2E3A", "Quasi nuova, garanzia di fabbrica residua. Un solo proprietario aziendale.", ["Head-up display", "Sedili riscaldati", "Ricarica wireless"], "venduto", 5, 40, 25900, 9, "Luca Bassi"],
-      [13, "Fiat", "Tipo", "1.6 Mjt Easy", 2019, 71000, 10400, "Diesel", "Manuale", 120, "berlina", "#9AA3A8", "Berlina spaziosa con tagliandi regolari.", ["Clima automatico", "Cruise control"], "venduto", 0, 80, 9900, 38, "Anna Greco"],
-      [14, "Peugeot", "208", "1.2 PureTech Allure", 2020, 39800, 12900, "Benzina", "Manuale", 82, "utilitaria", "#2B4C7E", "Ottime condizioni, un solo proprietario.", ["Schermo 7\"", "Sensori posteriori"], "venduto", 1, 70, 12400, 52, "Matteo Serra"],
-      [15, "Jeep", "Renegade", "1.6 Mjt Longitude", 2018, 94500, 15200, "Diesel", "Manuale", 120, "suv", "#5D6B50", "SUV compatto, tagliandi in rete ufficiale.", ["Navigatore", "Cerchi da 17\""], "venduto", 2, 95, 14600, 71, "Chiara Fabbri"],
-      [16, "Ford", "Fiesta", "1.1 Titanium", 2019, 58200, 9800, "Benzina", "Manuale", 85, "utilitaria", "#B8322B", "Consumi bassi, ideale per neopatentati.", ["Bluetooth", "Clima manuale"], "venduto", 3, 120, 9300, 96, "Franco Neri"],
-      [17, "Mini", "Cooper", "1.5 Business", 2020, 41200, 18400, "Benzina", "Automatico", 136, "utilitaria", "#23282B", "Allestimento Business con cambio automatico.", ["Navigatore", "Fari LED"], "venduto", 4, 145, 17700, 120, "Irene Costa"],
-      [18, "Skoda", "Octavia Wagon", "2.0 TDI Style", 2019, 112000, 16900, "Diesel", "Automatico", 150, "station", "#E9ECEE", "Station wagon per chi percorre molti chilometri.", ["Cruise adattivo", "Gancio traino"], "venduto", 5, 35, 16300, 15, "Roberto Villa"]
-    ];
-    return rows.map(function (r) {
-      var s = SELLERS[r[15]];
-      var a = {
-        id: r[0], marca: r[1], modello: r[2], versione: r[3], anno: r[4], km: r[5], prezzo: r[6],
-        carb: r[7], cambio: r[8], cv: r[9], tipo: r[10], hex: r[11], desc: r[12], opt: r[13],
-        stato: r[14], venditore: { nome: s.nome, tel: s.tel, mail: s.mail }, foto: [], miei: false, data: daysAgo(r[16])
-      };
-      if (r[14] === "venduto") { a.prezzoVendita = r[17]; a.dataVendita = daysAgo(r[18]); a.acquirente = r[19]; }
-      return a;
-    });
-  }
-  function seedR() {
-    return [
-      { id: 1, annuncioId: 2, nome: "Federica Monti", tel: "+39 347 000 0201", mail: "", msg: "Buongiorno, è possibile vedere l'auto sabato mattina?", data: daysAgo(1), stato: "nuova" },
-      { id: 2, annuncioId: 3, nome: "Andrea Pellegrini", tel: "", mail: "a.pellegrini@esempio.it", msg: "L'auto ha la garanzia sulla batteria ibrida? Fino a quando?", data: daysAgo(2), stato: "nuova" },
-      { id: 3, annuncioId: 7, nome: "Simone Rossi", tel: "+39 347 000 0203", mail: "", msg: "Accettate una permuta con una Golf del 2016?", data: daysAgo(6), stato: "gestita" }
-    ];
+  const RICHIESTE_INIZIALI = [
+    { id: 1, annuncioId: 2, nome: "Federica Monti", tel: "+39 347 000 0201", mail: "", msg: "Buongiorno, è possibile vedere l'auto sabato mattina?", data: giorniFa(1), stato: "nuova" },
+    { id: 2, annuncioId: 3, nome: "Andrea Pellegrini", tel: "", mail: "a.pellegrini@esempio.it", msg: "L'auto ha la garanzia sulla batteria ibrida?", data: giorniFa(2), stato: "nuova" }
+  ];
+
+  function caricaAnnunci() {
+    const dati = localStorage.getItem("motorvia_annunci");
+    if (dati) return JSON.parse(dati);
+    localStorage.setItem("motorvia_annunci", JSON.stringify(AUTO_INIZIALI));
+    return AUTO_INIZIALI;
   }
 
-  function getA() { var v = load(KA); if (!v) { v = memA || seedA(); save(KA, v); } memA = v; return v; }
-  function setA(v) { memA = v; return save(KA, v); }
-  function getR() { var v = load(KR); if (!v) { v = memR || seedR(); save(KR, v); } memR = v; return v; }
-  function setR(v) { memR = v; return save(KR, v); }
-  function nextId(arr) { return arr.reduce(function (m, x) { return Math.max(m, x.id); }, 0) + 1; }
-  function patchItem(list, id, patch) { list.forEach(function (x) { if (x.id === id) Object.keys(patch).forEach(function (k) { x[k] = patch[k]; }); }); return list; }
-  function addAnnuncio(a) { var l = getA(); a.id = nextId(l); l.push(a); return setA(l); }
-  function updAnnuncio(id, p) { return setA(patchItem(getA(), id, p)); }
-  function delAnnuncio(id) { setA(getA().filter(function (x) { return x.id !== id; })); }
-  function addRichiesta(r) { var l = getR(); r.id = nextId(l); l.push(r); return setR(l); }
-  function updRichiesta(id, p) { return setR(patchItem(getR(), id, p)); }
-  function resetDati() { memA = memR = null; try { localStorage.removeItem(KA); localStorage.removeItem(KR); } catch (e) {} getA(); getR(); }
-
-  /* ========== UTILITÀ ========== */
-  var eur = new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
-  var nf = new Intl.NumberFormat("it-IT");
-  var STATI = { pubblicato: "In vendita", revisione: "In revisione", venduto: "Venduta", rifiutato: "Non pubblicata" };
-  var TIPI = { utilitaria: "Utilitaria", berlina: "Berlina", suv: "SUV", station: "Station wagon" };
-  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-  function rif(c) { return "MV " + String(c.id).padStart(3, "0"); }
-  function fmtData(iso) { return new Date(iso).toLocaleDateString("it-IT", { day: "2-digit", month: "short", year: "numeric" }); }
-  function art(c) {
-    if (c.foto && c.foto.length) return '<div class="art"><img src="' + c.foto[0] + '" alt="' + esc(c.marca) + ' ' + esc(c.modello) + '"></div>';
-    return '<div class="art"><span class="dot" style="background:' + esc(c.hex) + '"></span>' + esc(TIPI[c.tipo] || "Auto") + '</div>';
-  }
-  function cardInner(c) {
-    return art(c) + '<div class="body"><h3>' + esc(c.marca) + ' ' + esc(c.modello) + '</h3>' +
-      '<p class="muted small">' + esc(c.versione || "") + '</p>' +
-      '<p class="muted small">' + esc(c.anno) + ' · ' + nf.format(c.km) + ' km · ' + esc(c.carb) + ' · ' + esc(c.cambio) + '</p>' +
-      '<p class="price">' + (c.prezzo > 0 ? eur.format(c.prezzo) : "Prezzo da definire") + '</p></div>';
+  function salvaAnnunci(lista) {
+    localStorage.setItem("motorvia_annunci", JSON.stringify(lista));
   }
 
-  /* ========== NAVIGAZIONE ========== */
-  var PAGES = ["home", "compra", "vendi", "gestione"], inited = {};
-  function route() {
-    var p = location.hash.replace("#", "");
-    if (PAGES.indexOf(p) === -1) p = "home";
-    PAGES.forEach(function (n) { $("p-" + n).hidden = n !== p; });
-    document.querySelectorAll("nav a").forEach(function (a) {
-      if (a.getAttribute("data-nav") === p) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
-    });
-    ({ home: home, compra: compra, vendi: vendi, gestione: gestione })[p]();
-    window.scrollTo(0, 0);
-  }
-  window.addEventListener("hashchange", route);
-
-  function home() {
-    var a = getA(), r = getR();
-    var n = function (st) { return a.filter(function (x) { return x.stato === st; }).length; };
-    var nu = r.filter(function (x) { return x.stato === "nuova"; }).length;
-    $("n-vendita").textContent = n("pubblicato") + " auto in vendita";
-    $("n-revisione").textContent = n("revisione") + (n("revisione") === 1 ? " annuncio in revisione" : " annunci in revisione");
-    $("n-richieste").textContent = nu + (nu === 1 ? " richiesta nuova" : " richieste nuove");
+  function caricaRichieste() {
+    const dati = localStorage.getItem("motorvia_richieste");
+    if (dati) return JSON.parse(dati);
+    localStorage.setItem("motorvia_richieste", JSON.stringify(RICHIESTE_INIZIALI));
+    return RICHIESTE_INIZIALI;
   }
 
-  /* ========== COMPRA ========== */
-  function lista() { return getA().filter(function (c) { return c.stato === "pubblicato"; }); }
-  function popolaMarche() {
-    var cur = $("f-marca").value;
-    var marche = Array.from(new Set(lista().map(function (c) { return c.marca; }))).sort();
-    $("f-marca").innerHTML = '<option value="">Tutte</option>' + marche.map(function (m) { return '<option>' + esc(m) + '</option>'; }).join("");
-    if (marche.indexOf(cur) !== -1) $("f-marca").value = cur;
+  function salvaRichieste(lista) {
+    localStorage.setItem("motorvia_richieste", JSON.stringify(lista));
   }
-  function filtrate() {
-    var t = $("f-text").value.trim().toLowerCase(), marca = $("f-marca").value, carb = $("f-carb").value;
-    var pmax = +$("f-prezzo").value, kmax = +$("f-km").value, amin = +$("f-anno").value;
-    var l = lista().filter(function (c) {
-      if (marca && c.marca !== marca) return false;
-      if (carb && c.carb !== carb) return false;
-      if (c.prezzo > pmax || c.km > kmax || c.anno < amin) return false;
-      if (t && (c.marca + " " + c.modello + " " + (c.versione || "")).toLowerCase().indexOf(t) === -1) return false;
-      return true;
+
+  // =========================================================================
+  // 2. FUNZIONI DI UTILITÀ
+  // =========================================================================
+  const euro = new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
+  const numero = new Intl.NumberFormat("it-IT");
+  const STATI = { pubblicato: "In vendita", revisione: "In revisione", venduto: "Venduta", rifiutato: "Non pubblicata" };
+  const TIPI = { utilitaria: "Utilitaria", berlina: "Berlina", suv: "SUV", station: "Station wagon" };
+
+  function creaCardAuto(auto) {
+    const immagine = (auto.foto && auto.foto.length > 0)
+      ? `<div class="immagine-auto"><img src="${auto.foto[0]}"></div>`
+      : `<div class="immagine-auto"><span class="pallino-colore" style="background:${auto.colore}"></span>${TIPI[auto.tipo] || "Auto"}</div>`;
+
+    return `
+      ${immagine}
+      <div class="corpo-card">
+        <h3>${auto.marca} ${auto.modello}</h3>
+        <p class="testo-chiaro piccolo">${auto.versione || ""}</p>
+        <p class="testo-chiaro piccolo">${auto.anno} · ${numero.format(auto.km)} km · ${auto.carb} · ${auto.cambio}</p>
+        <p class="prezzo">${auto.prezzo > 0 ? euro.format(auto.prezzo) : "Prezzo da definire"}</p>
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // 3. NAVIGAZIONE TRA LE 4 PAGINE
+  // =========================================================================
+  function cambiaPagina() {
+    const pagina = ["home", "compra", "vendi", "gestione"].includes(location.hash.slice(1))
+      ? location.hash.slice(1)
+      : "home";
+
+    ["home", "compra", "vendi", "gestione"].forEach(nome => {
+      document.getElementById("pagina-" + nome).hidden = (nome !== pagina);
+      document.getElementById("link-" + nome).classList.toggle("attivo", nome === pagina);
     });
-    var s = $("sort").value;
-    return l.sort(function (a, b) {
-      if (s === "prezzo-asc") return a.prezzo - b.prezzo;
-      if (s === "prezzo-desc") return b.prezzo - a.prezzo;
-      if (s === "anno-desc") return b.anno - a.anno || a.km - b.km;
-      if (s === "km-asc") return a.km - b.km;
-      return new Date(b.data) - new Date(a.data);
+
+    if (pagina === "home") aggiornaHome();
+    if (pagina === "compra") aggiornaCompra();
+    if (pagina === "vendi") aggiornaVendi();
+    if (pagina === "gestione") aggiornaGestione();
+  }
+
+  window.addEventListener("hashchange", cambiaPagina);
+
+  // =========================================================================
+  // 4. HOME
+  // =========================================================================
+  function aggiornaHome() {
+    const annunci = caricaAnnunci();
+    const richieste = caricaRichieste();
+    document.getElementById("home-num-vendita").textContent = annunci.filter(a => a.stato === "pubblicato").length + " auto in vendita";
+    document.getElementById("home-num-revisione").textContent = annunci.filter(a => a.stato === "revisione").length + " annunci in revisione";
+    document.getElementById("home-num-richieste").textContent = richieste.filter(r => r.stato === "nuova").length + " richieste nuove";
+  }
+
+  // =========================================================================
+  // 5. COMPRA
+  // =========================================================================
+  for (let anno = 2026; anno >= 2016; anno--) {
+    document.getElementById("filtro-anno").innerHTML += `<option value="${anno}">Dal ${anno}</option>`;
+  }
+  document.getElementById("filtro-anno").insertAdjacentHTML("afterbegin", '<option value="0">Qualsiasi</option>');
+  document.getElementById("filtro-anno").value = "0";
+
+  function aggiornaCompra() {
+    const pubblicate = caricaAnnunci().filter(a => a.stato === "pubblicato");
+    const marche = [...new Set(pubblicate.map(a => a.marca))].sort();
+    document.getElementById("filtro-marca").innerHTML = '<option value="">Tutte</option>' + marche.map(m => `<option>${m}</option>`).join("");
+    filtraCatalogo();
+  }
+
+  function filtraCatalogo() {
+    const testo = document.getElementById("filtro-testo").value.toLowerCase();
+    const marca = document.getElementById("filtro-marca").value;
+    const carb = document.getElementById("filtro-carburante").value;
+    const prezzoMax = Number(document.getElementById("filtro-prezzo").value);
+    const kmMax = Number(document.getElementById("filtro-km").value);
+    const annoMin = Number(document.getElementById("filtro-anno").value);
+    const ordine = document.getElementById("ordinamento").value;
+
+    document.getElementById("testo-prezzo-max").textContent = euro.format(prezzoMax);
+    document.getElementById("testo-km-max").textContent = numero.format(kmMax) + " km";
+
+    const filtrate = caricaAnnunci().filter(a =>
+      a.stato === "pubblicato" &&
+      (!marca || a.marca === marca) &&
+      (!carb || a.carb === carb) &&
+      a.prezzo <= prezzoMax &&
+      a.km <= kmMax &&
+      a.anno >= annoMin &&
+      `${a.marca} ${a.modello} ${a.versione}`.toLowerCase().includes(testo)
+    );
+
+    filtrate.sort((a, b) => {
+      if (ordine === "prezzo-asc") return a.prezzo - b.prezzo;
+      if (ordine === "prezzo-desc") return b.prezzo - a.prezzo;
+      if (ordine === "anno-desc") return b.anno - a.anno;
+      return a.km - b.km;
     });
+
+    document.getElementById("conteggio-auto").textContent = filtrate.length;
+    document.getElementById("griglia-catalogo").innerHTML = filtrate.length
+      ? filtrate.map(a => `<button class="card-auto" onclick="apriPopup(${a.id})">${creaCardAuto(a)}</button>`).join("")
+      : '<div class="vuoto">Nessuna auto corrisponde ai filtri scelti.</div>';
   }
-  function renderCatalogo() {
-    $("f-prezzo-out").textContent = eur.format($("f-prezzo").value);
-    $("f-km-out").textContent = nf.format($("f-km").value) + " km";
-    var l = filtrate();
-    $("count").textContent = l.length;
-    $("count-label").textContent = l.length === 1 ? "auto trovata" : "auto trovate";
-    $("grid").innerHTML = l.length
-      ? l.map(function (c) { return '<button class="card" type="button" data-id="' + c.id + '">' + cardInner(c) + '</button>'; }).join("")
-      : '<div class="empty">Nessuna auto corrisponde ai filtri scelti.</div>';
+
+  function azzeraFiltri() {
+    document.getElementById("form-filtri").reset();
+    filtraCatalogo();
   }
-  function resetFiltri() {
-    $("f-text").value = ""; $("f-marca").value = ""; $("f-carb").value = "";
-    $("f-prezzo").value = 40000; $("f-km").value = 200000; $("f-anno").value = 0; $("sort").value = "prezzo-asc";
-    renderCatalogo();
-  }
-  function apri(id) {
-    var c = getA().filter(function (x) { return x.id === id; })[0];
-    if (!c) return;
-    var foto = c.foto || [], v = c.venditore || {};
-    var left = art(c) + (foto.length > 1 ? '<div class="thumbs">' + foto.map(function (f, i) {
-      return '<button type="button" data-i="' + i + '" aria-label="Foto ' + (i + 1) + '"' + (i === 0 ? ' aria-current="true"' : '') + '><img src="' + f + '" alt=""></button>';
-    }).join("") + '</div>' : "");
-    var opts = (c.opt && c.opt.length) ? '<ul class="chips">' + c.opt.map(function (o) { return '<li>' + esc(o) + '</li>'; }).join("") + '</ul>' : "";
-    $("dlg-body").innerHTML =
-      '<div class="dlg"><div class="stack" style="align-content:start" id="dlg-left">' + left + '<p>' + esc(c.desc) + '</p>' + opts + '</div>' +
-      '<div class="stack" style="align-content:start">' +
-      '<div><p class="muted small">' + esc(c.marca) + ' · ' + rif(c) + '</p><h2>' + esc(c.modello) + '</h2><p class="muted small">' + esc(c.versione || "") + '</p></div>' +
-      '<p class="price">' + eur.format(c.prezzo) + '</p>' +
-      '<table><tbody><tr><th>Immatricolazione</th><td class="r">' + esc(c.anno) + '</td></tr>' +
-      '<tr><th>Chilometri</th><td class="r">' + nf.format(c.km) + ' km</td></tr>' +
-      '<tr><th>Alimentazione</th><td class="r">' + esc(c.carb) + '</td></tr>' +
-      '<tr><th>Cambio</th><td class="r">' + esc(c.cambio) + '</td></tr>' +
-      (c.cv ? '<tr><th>Potenza</th><td class="r">' + esc(c.cv) + ' CV</td></tr>' : '') + '</tbody></table>' +
-      '<form class="box stack" id="contact" novalidate><h3>Contatta il venditore</h3>' +
-      '<p><b>' + esc(v.nome || "Venditore") + '</b>' + (v.tel ? '<br><span class="muted small">' + esc(v.tel) + '</span>' : '') + '</p>' +
-      '<label>Il tuo nome<input id="c-nome" autocomplete="name"></label>' +
-      '<label>Telefono<input id="c-tel" type="tel" autocomplete="tel"></label>' +
-      '<label>Email<input id="c-mail" type="email" autocomplete="email"></label>' +
-      '<label>Messaggio<textarea id="c-msg">Buongiorno, sono interessato a questa auto. È ancora disponibile?</textarea></label>' +
-      '<div id="c-out" aria-live="polite"></div><button class="btn" type="submit">Invia la richiesta</button></form></div></div>';
-    $("contact").addEventListener("submit", function (e) {
-      e.preventDefault();
-      var nome = $("c-nome").value.trim(), tel = $("c-tel").value.trim(), mail = $("c-mail").value.trim();
-      if (!nome || (!tel && !mail)) { $("c-out").innerHTML = '<p class="err">Inserisci il tuo nome e almeno un recapito.</p>'; return; }
-      addRichiesta({ annuncioId: c.id, nome: nome, tel: tel, mail: mail, msg: $("c-msg").value.trim(), data: new Date().toISOString(), stato: "nuova" });
-      $("c-out").innerHTML = '<p class="ok"><b>Richiesta inviata.</b> La trovi anche nella <a href="#gestione" id="to-g">gestione</a>.</p>';
-      $("to-g").addEventListener("click", function () { $("dlg").close(); });
-      $("contact").querySelector("button[type=submit]").disabled = true;
-    });
-    $("dlg").showModal();
-  }
-  $("dlg-body").addEventListener("click", function (e) {
-    var b = e.target.closest(".thumbs button");
-    if (!b) return;
-    var imgs = $("dlg-left").querySelectorAll(".thumbs img");
-    var main = $("dlg-left").querySelector(".art img");
-    if (main) main.src = imgs[+b.getAttribute("data-i")].src;
-    $("dlg-left").querySelectorAll(".thumbs button").forEach(function (x) { x.removeAttribute("aria-current"); });
-    b.setAttribute("aria-current", "true");
+
+  ["filtro-testo", "filtro-marca", "filtro-carburante", "filtro-prezzo", "filtro-km", "filtro-anno", "ordinamento"].forEach(id => {
+    document.getElementById(id).addEventListener("input", filtraCatalogo);
   });
-  $("dlg-close").addEventListener("click", function () { $("dlg").close(); });
-  $("dlg").addEventListener("click", function (e) { if (e.target === $("dlg")) $("dlg").close(); });
-  $("grid").addEventListener("click", function (e) { var b = e.target.closest(".card"); if (b) apri(+b.getAttribute("data-id")); });
-  ["f-text", "f-marca", "f-carb", "f-prezzo", "f-km", "f-anno", "sort"].forEach(function (id) {
-    $(id).addEventListener("input", renderCatalogo); $(id).addEventListener("change", renderCatalogo);
-  });
-  $("f-reset").addEventListener("click", resetFiltri);
-  $("filters").addEventListener("submit", function (e) { e.preventDefault(); });
-  (function () {
-    var h = '<option value="0">Qualsiasi</option>';
-    for (var y = 2026; y >= 2016; y--) h += '<option value="' + y + '">Dal ' + y + '</option>';
-    $("f-anno").innerHTML = h;
-  })();
-  function compra() { popolaMarche(); renderCatalogo(); }
 
-  /* ========== VENDI ========== */
-  var COLORS = [["Bianco", "#E9ECEE"], ["Nero", "#23282B"], ["Grigio", "#9AA3A8"], ["Blu", "#2B4C7E"], ["Rosso", "#B8322B"], ["Verde", "#5D6B50"], ["Arancione", "#E08A1E"], ["Azzurro", "#7FB5C9"]];
-  var BASE = { utilitaria: 15000, berlina: 24000, suv: 34000, station: 28000 };
-  var fotos = [];
-  (function () {
-    var h = "";
-    for (var y = 2026; y >= 2006; y--) h += '<option value="' + y + '">' + y + '</option>';
-    $("v-anno").innerHTML = h; $("v-anno").value = 2020;
-    $("swatches").innerHTML = COLORS.map(function (c, i) {
-      return '<label><input type="radio" name="colore" value="' + c[1] + '" aria-label="' + c[0] + '"' + (i === 2 ? " checked" : "") + '><span style="background:' + c[1] + '"></span></label>';
-    }).join("");
-  })();
-  function valori() {
-    var col = document.querySelector('input[name="colore"]:checked');
+  function apriPopup(id) {
+    const auto = caricaAnnunci().find(a => a.id === id);
+    const immagine = (auto.foto && auto.foto.length)
+      ? `<div class="immagine-auto"><img src="${auto.foto[0]}"></div>`
+      : `<div class="immagine-auto"><span class="pallino-colore" style="background:${auto.colore}"></span>${TIPI[auto.tipo]}</div>`;
+
+    document.getElementById("corpo-popup").innerHTML = `
+      <div class="contenuto-popup">
+        <div class="colonna" style="align-content:start;">
+          ${immagine}
+          <p>${auto.desc}</p>
+          <ul class="etichette-optional">${(auto.opt || []).map(o => `<li>${o}</li>`).join("")}</ul>
+        </div>
+        <div class="colonna" style="align-content:start;">
+          <div>
+            <p class="testo-chiaro piccolo">${auto.marca} · MV 00${auto.id}</p>
+            <h2>${auto.modello}</h2>
+            <p class="testo-chiaro piccolo">${auto.versione}</p>
+          </div>
+          <p class="prezzo">${euro.format(auto.prezzo)}</p>
+          <table>
+            <tr><th>Anno</th><td class="destra">${auto.anno}</td></tr>
+            <tr><th>Chilometri</th><td class="destra">${numero.format(auto.km)} km</td></tr>
+            <tr><th>Alimentazione</th><td class="destra">${auto.carb}</td></tr>
+            <tr><th>Cambio</th><td class="destra">${auto.cambio}</td></tr>
+            <tr><th>Potenza</th><td class="destra">${auto.cv} CV</td></tr>
+          </table>
+          <form class="box colonna" onsubmit="inviaRichiesta(event, ${auto.id})">
+            <h3>Contatta il venditore</h3>
+            <p><b>${auto.venditore.nome}</b> · <span class="testo-chiaro piccolo">${auto.venditore.tel || ""}</span></p>
+            <label>Il tuo nome<input id="contatto-nome" required></label>
+            <label>Telefono<input id="contatto-tel" type="tel" required></label>
+            <label>Messaggio<textarea id="contatto-msg">Buongiorno, sono interessato a questa auto.</textarea></label>
+            <div id="esito-contatto"></div>
+            <button class="bottone" type="submit">Invia la richiesta</button>
+          </form>
+        </div>
+      </div>
+    `;
+    document.getElementById("popup-auto").showModal();
+  }
+
+  function inviaRichiesta(evento, idAuto) {
+    evento.preventDefault();
+    const richieste = caricaRichieste();
+    richieste.push({
+      id: Date.now(),
+      annuncioId: idAuto,
+      nome: document.getElementById("contatto-nome").value,
+      tel: document.getElementById("contatto-tel").value,
+      mail: "",
+      msg: document.getElementById("contatto-msg").value,
+      data: new Date().toISOString(),
+      stato: "nuova"
+    });
+    salvaRichieste(richieste);
+    document.getElementById("esito-contatto").innerHTML = '<p class="successo"><b>Richiesta inviata!</b></p>';
+  }
+
+  // =========================================================================
+  // 6. VENDI
+  // =========================================================================
+  const COLORI = ["#E9ECEE", "#23282B", "#9AA3A8", "#2B4C7E", "#B8322B", "#5D6B50", "#E08A1E", "#7FB5C9"];
+  const PREZZI_BASE = { utilitaria: 15000, berlina: 24000, suv: 34000, station: 28000 };
+  let fotoCaricate = [];
+
+  for (let anno = 2026; anno >= 2006; anno--) {
+    document.getElementById("vendi-anno").innerHTML += `<option value="${anno}">${anno}</option>`;
+  }
+  document.getElementById("vendi-anno").value = "2020";
+
+  document.getElementById("contenitore-colori").innerHTML = COLORI.map((col, i) => `
+    <label><input type="radio" name="colore-auto" value="${col}" ${i === 2 ? "checked" : ""}><span style="background:${col}"></span></label>
+  `).join("");
+
+  function leggiFormVendi() {
     return {
-      marca: $("v-marca").value.trim(), modello: $("v-modello").value.trim(), versione: $("v-versione").value.trim(),
-      anno: +$("v-anno").value, km: Math.max(0, +$("v-km").value || 0), carb: $("v-carb").value, cambio: $("v-cambio").value,
-      cv: +$("v-cv").value || 0, tipo: $("v-tipo").value, hex: col ? col.value : "#9AA3A8",
-      prezzo: Math.max(0, +$("v-prezzo").value || 0), desc: $("v-desc").value.trim(),
-      opt: $("v-opt").value.split(",").map(function (s) { return s.trim(); }).filter(Boolean),
-      venditore: { nome: $("v-nome").value.trim(), tel: $("v-tel").value.trim(), mail: $("v-mail").value.trim() }
-    };
-  }
-  function stima(v) {
-    var val = BASE[v.tipo] * Math.pow(0.87, Math.max(0, 2026 - v.anno)) * (1 - Math.min(v.km, 300000) / 420000);
-    if (v.carb === "Elettrica") val *= 1.08;
-    val = Math.max(val, 700);
-    return [Math.round(val * 0.92 / 50) * 50, Math.round(val * 1.08 / 50) * 50];
-  }
-  function anteprima() {
-    var v = valori();
-    $("preview").innerHTML = cardInner({ id: 0, marca: v.marca || "Marca", modello: v.modello || "Modello", versione: v.versione, anno: v.anno, km: v.km, carb: v.carb, cambio: v.cambio, tipo: v.tipo, hex: v.hex, prezzo: v.prezzo, foto: fotos });
-    var s = stima(v);
-    $("v-hint").textContent = "Valore di mercato indicativo: " + eur.format(s[0]) + " – " + eur.format(s[1]);
-  }
-  ["v-marca", "v-modello", "v-versione", "v-anno", "v-km", "v-carb", "v-cambio", "v-tipo", "v-prezzo"].forEach(function (id) {
-    $(id).addEventListener("input", anteprima); $(id).addEventListener("change", anteprima);
-  });
-  $("swatches").addEventListener("change", anteprima);
-
-  function ridimensiona(file, cb) {
-    var fr = new FileReader();
-    fr.onload = function () {
-      var img = new Image();
-      img.onload = function () {
-        var sc = Math.min(1, 720 / Math.max(img.width, img.height)), cv = document.createElement("canvas");
-        cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc);
-        cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
-        cb(cv.toDataURL("image/jpeg", 0.7));
-      };
-      img.onerror = function () { cb(null); };
-      img.src = fr.result;
-    };
-    fr.onerror = function () { cb(null); };
-    fr.readAsDataURL(file);
-  }
-  function mostraFoto() {
-    $("photos").innerHTML = fotos.map(function (f, i) {
-      return '<div class="ph"><img src="' + f + '" alt="Foto ' + (i + 1) + '"><button type="button" data-i="' + i + '" aria-label="Rimuovi foto ' + (i + 1) + '">×</button></div>';
-    }).join("");
-    anteprima();
-  }
-  $("v-foto").addEventListener("change", function () {
-    var files = Array.from($("v-foto").files).slice(0, 3 - fotos.length), pending = files.length;
-    if (!pending) return;
-    files.forEach(function (f) {
-      ridimensiona(f, function (d) {
-        if (d && fotos.length < 3) fotos.push(d);
-        if (!--pending) { $("v-foto").value = ""; mostraFoto(); }
-      });
-    });
-  });
-  $("photos").addEventListener("click", function (e) {
-    var b = e.target.closest("button[data-i]");
-    if (b) { fotos.splice(+b.getAttribute("data-i"), 1); mostraFoto(); }
-  });
-  $("form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var v = valori(), errs = [];
-    if (!v.marca) errs.push("la marca");
-    if (!v.modello) errs.push("il modello");
-    if (!v.prezzo) errs.push("il prezzo");
-    if (v.desc.length < 20) errs.push("la descrizione (almeno 20 caratteri)");
-    if (!v.venditore.nome) errs.push("il tuo nome");
-    if (!v.venditore.tel && !v.venditore.mail) errs.push("un telefono o un'email");
-    $("done").innerHTML = "";
-    if (errs.length) { $("errs").innerHTML = '<p class="err" style="margin-bottom:10px">Completa ' + errs.join(", ") + '.</p>'; return; }
-    $("errs").innerHTML = "";
-    v.foto = fotos.slice(); v.stato = "revisione"; v.miei = true; v.data = new Date().toISOString();
-    if (!addAnnuncio(v)) { $("errs").innerHTML = '<p class="err" style="margin-bottom:10px">Spazio insufficiente nel browser. Prova con meno foto.</p>'; return; }
-    $("done").innerHTML = '<p class="ok" style="margin-top:12px"><b>Annuncio inviato.</b> È in revisione: dopo l\'approvazione compare nel <a href="#compra">catalogo</a>.</p>';
-    fotos = []; $("form").reset(); $("v-anno").value = 2020;
-    mostraFoto(); elenco();
-  });
-  function elenco() {
-    var mine = getA().filter(function (a) { return a.miei; }).sort(function (a, b) { return new Date(b.data) - new Date(a.data); });
-    $("mine").innerHTML = mine.length ? mine.map(function (a) {
-      return '<li><div><b>' + esc(a.marca) + ' ' + esc(a.modello) + '</b><br><span class="muted small">' + rif(a) + ' · inviato il ' + fmtData(a.data) + '</span></div>' +
-        '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span>' + eur.format(a.prezzo) + '</span><span class="pill ' + a.stato + '">' + STATI[a.stato] + '</span>' +
-        '<button class="btn danger sm" type="button" data-del="' + a.id + '">Ritira</button></div></li>';
-    }).join("") : '<li class="muted">Non hai ancora inviato annunci da questo browser.</li>';
-  }
-  $("mine").addEventListener("click", function (e) {
-    var b = e.target.closest("button[data-del]");
-    if (!b) return;
-    if (b.getAttribute("data-sure") !== "1") { b.setAttribute("data-sure", "1"); b.textContent = "Conferma"; return; }
-    delAnnuncio(+b.getAttribute("data-del")); elenco();
-  });
-  function vendi() { anteprima(); elenco(); }
-
-  /* ========== GESTIONE ========== */
-  var gs = { sold: null, del: null, resetSure: false }, DAY = 864e5;
-  function summary() {
-    var a = getA(), r = getR();
-    var inV = a.filter(function (x) { return x.stato === "pubblicato"; }).length;
-    var rev = a.filter(function (x) { return x.stato === "revisione"; }).length;
-    var nu = r.filter(function (x) { return x.stato === "nuova"; }).length;
-    var inc = a.filter(function (x) { return x.stato === "venduto" && Date.now() - new Date(x.dataVendita) <= 30 * DAY; })
-      .reduce(function (s, x) { return s + (x.prezzoVendita || 0); }, 0);
-    $("summary").innerHTML =
-      '<div><span class="muted small">In vendita</span><b>' + inV + '</b></div>' +
-      '<div class="' + (rev ? 'warn' : '') + '"><span class="muted small">Da approvare</span><b>' + rev + '</b></div>' +
-      '<div class="' + (nu ? 'warn' : '') + '"><span class="muted small">Richieste nuove</span><b>' + nu + '</b></div>' +
-      '<div><span class="muted small">Incassi, 30 giorni</span><b>' + eur.format(inc) + '</b></div>';
-    $("tab-richieste").textContent = "Richieste" + (nu ? " (" + nu + ")" : "");
-  }
-  function azioni(a) {
-    var b = [], id = a.id;
-    function btn(cls, act, txt) { b.push('<button class="btn ' + cls + ' sm" data-act="' + act + '" data-id="' + id + '">' + txt + '</button>'); }
-    if (a.stato === "revisione") { btn("", "approve", "Approva"); btn("ghost", "reject", "Rifiuta"); }
-    else if (a.stato === "pubblicato") { btn("", "sold-open", "Segna venduta"); btn("ghost", "reject", "Ritira"); }
-    else if (a.stato === "venduto") btn("ghost", "unsell", "Annulla vendita");
-    else btn("ghost", "approve", "Ripubblica");
-    if (gs.del === id) btn("danger", "del-ok", "Conferma elimina"); else btn("danger", "del", "Elimina");
-    return '<div class="acts">' + b.join("") + '</div>';
-  }
-  function annunci() {
-    var st = $("a-stato").value, q = $("a-q").value.trim().toLowerCase();
-    var o = { revisione: 0, pubblicato: 1, rifiutato: 2, venduto: 3 };
-    var l = getA().filter(function (a) {
-      if (st && a.stato !== st) return false;
-      var v = a.venditore || {};
-      return !q || (a.marca + " " + a.modello + " " + (v.nome || "")).toLowerCase().indexOf(q) !== -1;
-    }).sort(function (x, y) { return o[x.stato] - o[y.stato] || new Date(y.data) - new Date(x.data); });
-    if (!l.length) { $("a-body").innerHTML = '<tr><td colspan="6" class="muted" style="text-align:center;padding:24px">Nessun annuncio corrisponde ai filtri.</td></tr>'; return; }
-    $("a-body").innerHTML = l.map(function (a) {
-      var v = a.venditore || {};
-      var row = '<tr><td>' + rif(a) + '</td>' +
-        '<td><b>' + esc(a.marca) + ' ' + esc(a.modello) + '</b><br><span class="muted small">' + esc(a.anno) + ' · ' + nf.format(a.km) + ' km · ' + esc(a.carb) + '</span></td>' +
-        '<td>' + esc(v.nome || "") + '<br><span class="muted small">' + esc(v.tel || v.mail || "") + '</span></td>' +
-        '<td class="r">' + eur.format(a.prezzo) + '</td>' +
-        '<td><span class="pill ' + a.stato + '">' + STATI[a.stato] + '</span></td><td>' + azioni(a) + '</td></tr>';
-      if (gs.sold === a.id) {
-        row += '<tr><td colspan="6"><div class="soldf box">' +
-          '<label>Prezzo finale in euro<input id="s-prezzo" type="number" min="0" step="100" value="' + a.prezzo + '"></label>' +
-          '<label>Acquirente<input id="s-acq" placeholder="Nome e cognome"></label>' +
-          '<button class="btn sm" data-act="sold-ok" data-id="' + a.id + '">Conferma vendita</button>' +
-          '<button class="btn ghost sm" data-act="sold-no" data-id="' + a.id + '">Annulla</button>' +
-          '<span class="err" id="s-err"></span></div></td></tr>';
+      marca: document.getElementById("vendi-marca").value,
+      modello: document.getElementById("vendi-modello").value,
+      versione: document.getElementById("vendi-versione").value,
+      anno: Number(document.getElementById("vendi-anno").value),
+      km: Number(document.getElementById("vendi-km").value),
+      carb: document.getElementById("vendi-carburante").value,
+      cambio: document.getElementById("vendi-cambio").value,
+      cv: Number(document.getElementById("vendi-cv").value),
+      tipo: document.getElementById("vendi-tipo").value,
+      colore: document.querySelector('input[name="colore-auto"]:checked').value,
+      prezzo: Number(document.getElementById("vendi-prezzo").value),
+      desc: document.getElementById("vendi-descrizione").value,
+      opt: document.getElementById("vendi-optional").value.split(",").map(s => s.trim()).filter(Boolean),
+      venditore: {
+        nome: document.getElementById("vendi-nome").value,
+        tel: document.getElementById("vendi-telefono").value,
+        mail: document.getElementById("vendi-email").value
       }
-      return row;
-    }).join("");
+    };
   }
-  $("a-body").addEventListener("click", function (e) {
-    var b = e.target.closest("button[data-act]");
-    if (!b) return;
-    var id = +b.getAttribute("data-id"), act = b.getAttribute("data-act");
-    if (act === "approve") updAnnuncio(id, { stato: "pubblicato" });
-    else if (act === "reject") { updAnnuncio(id, { stato: "rifiutato" }); if (gs.sold === id) gs.sold = null; }
-    else if (act === "sold-open") { gs.sold = id; gs.del = null; }
-    else if (act === "sold-no") gs.sold = null;
-    else if (act === "sold-ok") {
-      var p = +$("s-prezzo").value, acq = $("s-acq").value.trim();
-      if (!p || !acq) { $("s-err").textContent = "Inserisci prezzo finale e acquirente."; return; }
-      updAnnuncio(id, { stato: "venduto", prezzoVendita: p, acquirente: acq, dataVendita: new Date().toISOString() });
-      gs.sold = null;
-    }
-    else if (act === "unsell") updAnnuncio(id, { stato: "pubblicato", prezzoVendita: null, acquirente: null, dataVendita: null });
-    else if (act === "del") { gs.del = id; gs.sold = null; }
-    else if (act === "del-ok") { delAnnuncio(id); gs.del = null; }
-    gestione();
-  });
-  ["a-stato", "a-q"].forEach(function (id) { $(id).addEventListener("input", annunci); $(id).addEventListener("change", annunci); });
 
-  function richieste() {
-    var st = $("r-stato").value, ann = {};
-    getA().forEach(function (a) { ann[a.id] = a; });
-    var l = getR().filter(function (r) { return !st || r.stato === st; }).sort(function (a, b) { return new Date(b.data) - new Date(a.data); });
-    $("r-list").innerHTML = l.length ? l.map(function (r) {
-      var a = ann[r.annuncioId];
-      return '<article class="req"><header><b>' + esc(r.nome) + '</b><span class="pill ' + r.stato + '">' + (r.stato === "nuova" ? "Nuova" : "Gestita") + '</span></header>' +
-        '<p class="muted small">' + (a ? esc(a.marca) + ' ' + esc(a.modello) + ' · ' + rif(a) : "Annuncio eliminato") + ' · ' + fmtData(r.data) + '</p>' +
-        '<p>' + esc(r.msg || "Nessun messaggio.") + '</p>' +
-        '<p class="muted small">' + [r.tel, r.mail].filter(Boolean).map(esc).join(" · ") + '</p>' +
-        '<div><button class="btn ghost sm" data-rid="' + r.id + '" data-to="' + (r.stato === "nuova" ? "gestita" : "nuova") + '">' + (r.stato === "nuova" ? "Segna come gestita" : "Riapri") + '</button></div></article>';
-    }).join("") : '<div class="empty">Nessuna richiesta da mostrare.</div>';
-  }
-  $("r-list").addEventListener("click", function (e) {
-    var b = e.target.closest("button[data-rid]");
-    if (!b) return;
-    updRichiesta(+b.getAttribute("data-rid"), { stato: b.getAttribute("data-to") });
-    gestione();
-  });
-  $("r-stato").addEventListener("change", richieste);
-
-  function vendite() {
-    var l = getA().filter(function (a) { return a.stato === "venduto"; }).sort(function (a, b) { return new Date(b.dataVendita) - new Date(a.dataVendita); });
-    var tot = l.reduce(function (s, a) { return s + (a.prezzoVendita || 0); }, 0);
-    var rich = l.reduce(function (s, a) { return s + a.prezzo; }, 0);
-    var diff = rich ? (tot - rich) / rich * 100 : 0;
-    $("v-stats").innerHTML =
-      '<div><span class="muted small">Auto vendute</span><b>' + l.length + '</b></div>' +
-      '<div><span class="muted small">Incasso totale</span><b>' + eur.format(tot) + '</b></div>' +
-      '<div><span class="muted small">Sconto medio sul richiesto</span><b>' + (l.length ? diff.toFixed(1).replace(".", ",") + "%" : "–") + '</b></div>';
-    var now = new Date(), mesi = [];
-    for (var i = 5; i >= 0; i--) {
-      var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      mesi.push({ y: d.getFullYear(), m: d.getMonth(), tot: 0, label: d.toLocaleDateString("it-IT", { month: "short" }) });
-    }
-    l.forEach(function (a) {
-      var d = new Date(a.dataVendita);
-      mesi.forEach(function (m) { if (m.y === d.getFullYear() && m.m === d.getMonth()) m.tot += a.prezzoVendita || 0; });
+  function aggiornaAnteprima() {
+    const dati = leggiFormVendi();
+    document.getElementById("card-anteprima").innerHTML = creaCardAuto({
+      ...dati,
+      marca: dati.marca || "Marca",
+      modello: dati.modello || "Modello",
+      foto: fotoCaricate
     });
-    var max = Math.max.apply(null, mesi.map(function (m) { return m.tot; }).concat([1]));
-    $("v-bars").innerHTML = mesi.map(function (m) {
-      return '<div class="bar" title="' + eur.format(m.tot) + '"><span>' + (m.tot ? Math.round(m.tot / 1000) + " mila" : "0") + '</span><i style="height:' + Math.round(m.tot / max * 120) + 'px"></i></div>';
-    }).join("");
-    $("v-months").innerHTML = mesi.map(function (m) { return '<span>' + m.label + '</span>'; }).join("");
-    $("v-body").innerHTML = l.length ? l.map(function (a) {
-      var df = (a.prezzoVendita || 0) - a.prezzo;
-      return '<tr><td>' + fmtData(a.dataVendita) + '</td><td><b>' + esc(a.marca) + ' ' + esc(a.modello) + '</b><br><span class="muted small">' + rif(a) + '</span></td>' +
-        '<td>' + esc(a.acquirente || "–") + '</td><td class="r">' + eur.format(a.prezzo) + '</td><td class="r">' + eur.format(a.prezzoVendita || 0) + '</td>' +
-        '<td class="r" style="color:var(' + (df < 0 ? "--bad" : "--ok") + ')">' + (df > 0 ? "+" : "") + eur.format(df) + '</td></tr>';
-    }).join("") : '<tr><td colspan="6" class="muted" style="text-align:center;padding:24px">Nessuna vendita registrata.</td></tr>';
+
+    const stima = Math.round(PREZZI_BASE[dati.tipo] * Math.pow(0.87, 2026 - dati.anno));
+    document.getElementById("suggerimento-prezzo").textContent = "Valore stimato: circa " + euro.format(stima);
   }
-  function gestione() { summary(); annunci(); richieste(); vendite(); }
 
-  document.querySelector(".tabs").addEventListener("click", function (e) {
-    var b = e.target.closest("button[data-tab]");
-    if (!b) return;
-    ["annunci", "richieste", "vendite"].forEach(function (t) {
-      $("g-" + t).hidden = t !== b.getAttribute("data-tab");
-      $("tab-" + t).setAttribute("aria-selected", t === b.getAttribute("data-tab") ? "true" : "false");
-    });
+  ["vendi-marca", "vendi-modello", "vendi-versione", "vendi-anno", "vendi-km", "vendi-carburante", "vendi-cambio", "vendi-tipo", "vendi-prezzo", "contenitore-colori"].forEach(id => {
+    document.getElementById(id).addEventListener("input", aggiornaAnteprima);
   });
-  $("g-reset").addEventListener("click", function () {
-    if (!gs.resetSure) {
-      gs.resetSure = true;
-      $("g-reset").textContent = "Conferma il ripristino";
-      $("g-reset-note").textContent = "Annunci e richieste inseriti da te andranno persi.";
-      return;
+
+  document.getElementById("vendi-foto").addEventListener("change", (e) => {
+    for (const file of Array.from(e.target.files).slice(0, 3)) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        fotoCaricate.push(reader.result);
+        document.getElementById("contenitore-foto").innerHTML = fotoCaricate.map((src, i) => `
+          <div class="box-foto"><img src="${src}"><button type="button" onclick="fotoCaricate.splice(${i},1); aggiornaAnteprima(); this.parentElement.remove()">×</button></div>
+        `).join("");
+        aggiornaAnteprima();
+      };
+      reader.readAsDataURL(file);
     }
-    resetDati();
-    gs = { sold: null, del: null, resetSure: false };
-    $("g-reset").textContent = "Ripristina i dati di esempio";
-    $("g-reset-note").textContent = "Dati di esempio ripristinati.";
-    gestione();
   });
 
-  route();
-})();
+  document.getElementById("form-vendi").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const annunci = caricaAnnunci();
+    annunci.push({
+      ...leggiFormVendi(),
+      id: annunci.length + 1,
+      foto: [...fotoCaricate],
+      stato: "revisione",
+      mio: true,
+      data: new Date().toISOString()
+    });
+    salvaAnnunci(annunci);
+    document.getElementById("messaggio-conferma").innerHTML = '<p class="successo" style="margin-top:12px;"><b>Annuncio inviato in revisione!</b></p>';
+    fotoCaricate = [];
+    document.getElementById("contenitore-foto").innerHTML = "";
+    e.target.reset();
+    aggiornaVendi();
+  });
+
+  function aggiornaVendi() {
+    aggiornaAnteprima();
+    const miei = caricaAnnunci().filter(a => a.mio);
+    document.getElementById("lista-miei-annunci").innerHTML = miei.length
+      ? miei.map(a => `
+        <li>
+          <div><b>${a.marca} ${a.modello}</b> · ${euro.format(a.prezzo)}</div>
+          <div>
+            <span class="badge ${a.stato}">${STATI[a.stato]}</span>
+            <button class="bottone pericolo piccolo" onclick="eliminaAnnuncio(${a.id}); aggiornaVendi()">Ritira</button>
+          </div>
+        </li>
+      `).join("")
+      : '<li class="testo-chiaro">Nessun annuncio inviato da te.</li>';
+  }
+
+  // =========================================================================
+  // 7. GESTIONE
+  // =========================================================================
+  function cambiaScheda(scheda) {
+    ["annunci", "richieste", "vendite"].forEach(s => {
+      document.getElementById("sezione-" + s).hidden = (s !== scheda);
+      document.getElementById("tab-" + s).classList.toggle("attiva", s === scheda);
+    });
+  }
+
+  function aggiornaGestione() {
+    const annunci = caricaAnnunci();
+    const richieste = caricaRichieste();
+    const vendute = annunci.filter(a => a.stato === "venduto");
+    const incassi = vendute.reduce((tot, a) => tot + (a.prezzoVendita || 0), 0);
+
+    document.getElementById("riepilogo-gestione").innerHTML = `
+      <div><span class="testo-chiaro piccolo">In vendita</span><b>${annunci.filter(a => a.stato === "pubblicato").length}</b></div>
+      <div class="avviso"><span class="testo-chiaro piccolo">Da approvare</span><b>${annunci.filter(a => a.stato === "revisione").length}</b></div>
+      <div class="avviso"><span class="testo-chiaro piccolo">Richieste nuove</span><b>${richieste.filter(r => r.stato === "nuova").length}</b></div>
+      <div><span class="testo-chiaro piccolo">Incassi totali</span><b>${euro.format(incassi)}</b></div>
+    `;
+
+    // Tabella Annunci
+    const statoFiltro = document.getElementById("gestione-filtro-stato").value;
+    const cerca = document.getElementById("gestione-cerca").value.toLowerCase();
+    const filtrati = annunci.filter(a => (!statoFiltro || a.stato === statoFiltro) && `${a.marca} ${a.modello} ${a.venditore.nome}`.toLowerCase().includes(cerca));
+
+    document.getElementById("tabella-annunci").innerHTML = filtrati.map(a => `
+      <tr>
+        <td>MV 00${a.id}</td>
+        <td><b>${a.marca} ${a.modello}</b><br><span class="testo-chiaro piccolo">${a.anno} · ${numero.format(a.km)} km</span></td>
+        <td>${a.venditore.nome}</td>
+        <td class="destra">${euro.format(a.prezzo)}</td>
+        <td><span class="badge ${a.stato}">${STATI[a.stato]}</span></td>
+        <td>
+          ${a.stato === "revisione" ? `<button class="bottone piccolo" onclick="cambiaStato(${a.id}, 'pubblicato')">Approva</button>` : ""}
+          ${a.stato === "pubblicato" ? `<button class="bottone piccolo" onclick="segnaVenduta(${a.id})">Segna venduta</button>` : ""}
+          <button class="bottone pericolo piccolo" onclick="eliminaAnnuncio(${a.id}); aggiornaGestione()">Elimina</button>
+        </td>
+      </tr>
+    `).join("");
+
+    // Lista Richieste
+    const filtroReq = document.getElementById("gestione-filtro-richieste").value;
+    const reqFiltrate = richieste.filter(r => !filtroReq || r.stato === filtroReq);
+    document.getElementById("lista-richieste").innerHTML = reqFiltrate.map(r => {
+      const auto = annunci.find(a => a.id === r.annuncioId);
+      return `
+        <div class="card-richiesta">
+          <header><b>${r.nome}</b><span class="badge ${r.stato}">${r.stato === "nuova" ? "Nuova" : "Gestita"}</span></header>
+          <p class="testo-chiaro piccolo">${auto ? auto.marca + " " + auto.modello : "Auto eliminata"}</p>
+          <p>${r.msg}</p>
+          <p class="testo-chiaro piccolo">${r.tel || r.mail}</p>
+          <div><button class="bottone secondario piccolo" onclick="toggleRichiesta(${r.id})">Cambia stato</button></div>
+        </div>
+      `;
+    }).join("");
+
+    // Vendite e Grafico
+    document.getElementById("statistiche-vendite").innerHTML = `
+      <div class="box"><span class="testo-chiaro piccolo">Auto vendute</span><b style="font-size:22px;">${vendute.length}</b></div>
+      <div class="box"><span class="testo-chiaro piccolo">Incasso totale</span><b style="font-size:22px;">${euro.format(incassi)}</b></div>
+      <div class="box"><span class="testo-chiaro piccolo">Media vendita</span><b style="font-size:22px;">${vendute.length ? euro.format(incassi / vendute.length) : "0 €"}</b></div>
+    `;
+
+    const oggi = new Date();
+    const mesi = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(oggi.getFullYear(), oggi.getMonth() - i, 1);
+      const totMese = vendute
+        .filter(a => new Date(a.dataVendita).getMonth() === d.getMonth())
+        .reduce((s, a) => s + (a.prezzoVendita || 0), 0);
+      mesi.push({ nome: d.toLocaleDateString("it-IT", { month: "short" }), totale: totMese });
+    }
+
+    const maxMese = Math.max(...mesi.map(m => m.totale), 1);
+    document.getElementById("grafico-barre").innerHTML = mesi.map(m => `
+      <div class="colonna-barra"><span>${Math.round(m.totale / 1000)}k</span><i style="height:${Math.round((m.totale / maxMese) * 120)}px;"></i></div>
+    `).join("");
+    document.getElementById("etichette-mesi").innerHTML = mesi.map(m => `<span>${m.nome}</span>`).join("");
+
+    document.getElementById("tabella-vendite").innerHTML = vendute.map(a => `
+      <tr>
+        <td>${new Date(a.dataVendita).toLocaleDateString("it-IT")}</td>
+        <td><b>${a.marca} ${a.modello}</b></td>
+        <td>${a.acquirente}</td>
+        <td class="destra">${euro.format(a.prezzo)}</td>
+        <td class="destra">${euro.format(a.prezzoVendita)}</td>
+        <td class="destra">${euro.format(a.prezzoVendita - a.prezzo)}</td>
+      </tr>
+    `).join("");
+  }
+
+  function cambiaStato(id, nuovoStato) {
+    const lista = caricaAnnunci();
+    lista.find(a => a.id === id).stato = nuovoStato;
+    salvaAnnunci(lista);
+    aggiornaGestione();
+  }
+
+  function segnaVenduta(id) {
+    const lista = caricaAnnunci();
+    const auto = lista.find(a => a.id === id);
+    auto.stato = "venduto";
+    auto.prezzoVendita = auto.prezzo;
+    auto.acquirente = "Cliente in sede";
+    auto.dataVendita = new Date().toISOString();
+    salvaAnnunci(lista);
+    aggiornaGestione();
+  }
+
+  function eliminaAnnuncio(id) {
+    salvaAnnunci(caricaAnnunci().filter(a => a.id !== id));
+  }
+
+  function toggleRichiesta(id) {
+    const lista = caricaRichieste();
+    const r = lista.find(x => x.id === id);
+    r.stato = (r.stato === "nuova") ? "gestita" : "nuova";
+    salvaRichieste(lista);
+    aggiornaGestione();
+  }
+
+  function ripristinaDati() {
+    localStorage.clear();
+    aggiornaGestione();
+  }
+
+  document.getElementById("gestione-filtro-stato").addEventListener("change", aggiornaGestione);
+  document.getElementById("gestione-cerca").addEventListener("input", aggiornaGestione);
+  document.getElementById("gestione-filtro-richieste").addEventListener("change", aggiornaGestione);
+
+  // Avvio
+  cambiaPagina();
 </script>
 </body>
 </html>
