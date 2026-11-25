@@ -365,9 +365,7 @@
 </dialog>
 
 <script>
-  // =========================================================================
-  // 1. DATI INIZIALI E MEMORIA DEL BROWSER (localStorage)
-  // =========================================================================
+  // 1. DATI INIZIALI E MEMORIA DEL BROWSER
   function giorniFa(n) {
     const d = new Date();
     d.setDate(d.getDate() - n);
@@ -414,9 +412,7 @@
     localStorage.setItem("motorvia_richieste", JSON.stringify(lista));
   }
 
-  // =========================================================================
   // 2. FUNZIONI DI UTILITÀ
-  // =========================================================================
   const euro = new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
   const numero = new Intl.NumberFormat("it-IT");
   const STATI = { pubblicato: "In vendita", revisione: "In revisione", venduto: "Venduta", rifiutato: "Non pubblicata" };
@@ -438,9 +434,7 @@
     `;
   }
 
-  // =========================================================================
   // 3. NAVIGAZIONE TRA LE 4 PAGINE
-  // =========================================================================
   function cambiaPagina() {
     const pagina = ["home", "compra", "vendi", "gestione"].includes(location.hash.slice(1))
       ? location.hash.slice(1)
@@ -459,9 +453,7 @@
 
   window.addEventListener("hashchange", cambiaPagina);
 
-  // =========================================================================
   // 4. HOME
-  // =========================================================================
   function aggiornaHome() {
     const annunci = caricaAnnunci();
     const richieste = caricaRichieste();
@@ -470,9 +462,7 @@
     document.getElementById("home-num-richieste").textContent = richieste.filter(r => r.stato === "nuova").length + " richieste nuove";
   }
 
-  // =========================================================================
   // 5. COMPRA
-  // =========================================================================
   for (let anno = 2026; anno >= 2016; anno--) {
     document.getElementById("filtro-anno").innerHTML += `<option value="${anno}">Dal ${anno}</option>`;
   }
@@ -589,9 +579,7 @@
     document.getElementById("esito-contatto").innerHTML = '<p class="successo"><b>Richiesta inviata!</b></p>';
   }
 
-  // =========================================================================
   // 6. VENDI
-  // =========================================================================
   const COLORI = ["#E9ECEE", "#23282B", "#9AA3A8", "#2B4C7E", "#B8322B", "#5D6B50", "#E08A1E", "#7FB5C9"];
   const PREZZI_BASE = { utilitaria: 15000, berlina: 24000, suv: 34000, station: 28000 };
   let fotoCaricate = [];
@@ -694,9 +682,7 @@
       : '<li class="testo-chiaro">Nessun annuncio inviato da te.</li>';
   }
 
-  // =========================================================================
   // 7. GESTIONE
-  // =========================================================================
   function cambiaScheda(scheda) {
     ["annunci", "richieste", "vendite"].forEach(s => {
       document.getElementById("sezione-" + s).hidden = (s !== scheda);
